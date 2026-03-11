@@ -46,7 +46,7 @@ Selamat datang, {{ auth()->user()->name }}
 <i class="fa fa-clock"></i> Status
 </h5>
 
-<p>Cek status pendaftaran.</p>
+<p>Cek status pendaftaran Tes.</p>
 
 </div>
 </div>
