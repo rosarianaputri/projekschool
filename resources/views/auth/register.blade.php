@@ -105,22 +105,22 @@
             @csrf
 
             <div class="form-group">
-                <label for="name"><i class="fa fa-user"></i> nama lengkap</label>
+                <label for="name"><i class="fa fa-user"></i> Nama Lengkap</label>
                 <input id="name" type="text" name="name" placeholder="Masukkan Nama Lengkap" value="{{ old('name') }}" required autofocus>
             </div>
 
             <div class="form-group">
-                <label for="email"><i class="fa fa-envelope"></i> email</label>
+                <label for="email"><i class="fa fa-envelope"></i> Email</label>
                 <input id="email" type="email" name="email" placeholder="Masukkan Email" value="{{ old('email') }}" required>
             </div>
 
             <div class="form-group">
-                <label for="password"><i class="fa fa-lock"></i> password</label>
+                <label for="password"><i class="fa fa-lock"></i> Password</label>
                 <input id="password" type="password" name="password" placeholder="Password" required>
             </div>
 
             <div class="form-group">
-                <label for="password_confirmation"><i class="fa fa-lock"></i> konfirmasi password</label>
+                <label for="password_confirmation"><i class="fa fa-lock"></i> Konfirmasi Password</label>
                 <input id="password_confirmation" type="password" name="password_confirmation" placeholder="Ulangi Password" required>
             </div>
 

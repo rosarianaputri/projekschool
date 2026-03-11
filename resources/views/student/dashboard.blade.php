@@ -3,54 +3,61 @@
 @section('content')
 
 <h4 class="mb-4">
-Selamat datang, {{ auth()->user()->name }}
+    Selamat datang, {{ auth()->user()->name }}
 </h4>
 
 <div class="row">
 
-<div class="col-md-4">
-<div class="card">
-<div class="card-body">
+    <!-- FORMULIR PENDAFTARAN -->
+    <div class="col-md-4">
+        <a href="{{ route('student.formulir') }}" style="text-decoration:none;">
+            <div class="card">
+                <div class="card-body text-center">
 
-<h5>
-<i class="fa fa-list"></i> Tahapan PPDB
-</h5>
+                    <h5>
+                        <i class="fa fa-file"></i> Formulir Pendaftaran
+                    </h5>
 
-<p>Lihat tahapan pendaftaran siswa.</p>
+                    <p>Isi formulir pendaftaran siswa baru.</p>
 
-</div>
-</div>
-</div>
+                </div>
+            </div>
+        </a>
+    </div>
 
+    <!-- UPLOAD BERKAS -->
+    <div class="col-md-4">
+        <a href="{{ route('student.upload') }}" style="text-decoration:none;">
+            <div class="card">
+                <div class="card-body text-center">
 
-<div class="col-md-4">
-<div class="card">
-<div class="card-body">
+                    <h5>
+                        <i class="fa fa-upload"></i> Upload Berkas
+                    </h5>
 
-<h5>
-<i class="fa fa-upload"></i> Upload Berkas
-</h5>
+                    <p>Upload dokumen persyaratan.</p>
 
-<p>Upload dokumen pendaftaran.</p>
+                </div>
+            </div>
+        </a>
+    </div>
 
-</div>
-</div>
-</div>
+    <!-- STATUS PENDAFTARAN -->
+    <div class="col-md-4">
+        <a href="{{ route('student.status') }}" style="text-decoration:none;">
+            <div class="card">
+                <div class="card-body text-center">
 
+                    <h5>
+                        <i class="fa fa-clock"></i> Status Pendaftaran
+                    </h5>
 
-<div class="col-md-4">
-<div class="card">
-<div class="card-body">
+                    <p>Cek status hasil seleksi.</p>
 
-<h5>
-<i class="fa fa-clock"></i> Status
-</h5>
-
-<p>Cek status pendaftaran Tes.</p>
-
-</div>
-</div>
-</div>
+                </div>
+            </div>
+        </a>
+    </div>
 
 </div>
 
