@@ -1,63 +1,202 @@
 @extends('layouts.frontend')
 
+@php
+    $title = 'Layla School - Formulir PPDB';
+@endphp
+
 @section('content')
-<div class="container py-5">
-    <div class="bg-white shadow rounded-4 p-5">
-        <h3 class="fw-bold text-primary mb-4 text-center">Formulir Pendaftaran PPDB</h3>
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-9">
 
-        <form action="{{ route('front.ppdb.store') }}" method="POST">
-            @csrf
+                <div class="card shadow-sm border-0">
+                    <div class="card-body p-4 p-md-5">
 
-            <div class="row g-3">
-                <div class="col-md-6">
-                    <label class="form-label fw-semibold">Nama Lengkap</label>
-                    <input type="text" name="student_name" class="form-control" required>
+                        <h2 class="text-center mb-2 text-primary">
+                            Formulir Pendaftaran PPDB
+                        </h2>
+
+                        <p class="text-center text-muted mb-4">
+                            Isi data dengan benar. Data akan diproses admin untuk persetujuan (ACC).
+                        </p>
+
+                        {{-- Alert sukses --}}
+                        @if (session('status') === 'ppdb_submitted')
+                            <div class="alert alert-success text-center">
+                                Pendaftaran berhasil dikirim.<br>
+                                Kode pendaftaran Anda:
+                                <strong>{{ session('registration_code') }}</strong>
+                            </div>
+                        @endif
+
+                        <form method="POST" action="{{ route('front.ppdb.store') }}">
+                            @csrf
+
+                            <div class="row g-4">
+
+                                {{-- Nama Lengkap --}}
+                                <div class="col-md-6">
+                                    <label class="form-label">Nama Lengkap Siswa</label>
+                                    <input type="text"
+                                           name="student_name"
+                                           class="form-control"
+                                           value="{{ old('student_name') }}"
+                                           required>
+
+                                    @error('student_name')
+                                        <small class="text-danger">{{ $message }}</small>
+                                    @enderror
+                                </div>
+
+                                {{-- Jenis Kelamin --}}
+                                <div class="col-md-6">
+                                    <label class="form-label">Jenis Kelamin</label>
+                                    <select name="gender" class="form-control" required>
+                                        <option value="">Pilih</option>
+                                        <option value="L" {{ old('gender') == 'L' ? 'selected' : '' }}>
+                                            Laki-laki
+                                        </option>
+                                        <option value="P" {{ old('gender') == 'P' ? 'selected' : '' }}>
+                                            Perempuan
+                                        </option>
+                                    </select>
+
+                                    @error('gender')
+                                        <small class="text-danger">{{ $message }}</small>
+                                    @enderror
+                                </div>
+
+                                {{-- Tempat Lahir --}}
+                                <div class="col-md-6">
+                                    <label class="form-label">Tempat Lahir</label>
+                                    <input type="text"
+                                           name="birth_place"
+                                           class="form-control"
+                                           value="{{ old('birth_place') }}"
+                                           required>
+
+                                    @error('birth_place')
+                                        <small class="text-danger">{{ $message }}</small>
+                                    @enderror
+                                </div>
+
+                                {{-- Tanggal Lahir --}}
+                                <div class="col-md-6">
+                                    <label class="form-label">Tanggal Lahir</label>
+                                    <input type="date"
+                                           name="birth_date"
+                                           class="form-control"
+                                           value="{{ old('birth_date') }}"
+                                           required>
+
+                                    @error('birth_date')
+                                        <small class="text-danger">{{ $message }}</small>
+                                    @enderror
+                                </div>
+
+                                {{-- Sekolah Asal --}}
+                                <div class="col-md-6">
+                                    <label class="form-label">Asal Sekolah</label>
+                                    <input type="text"
+                                           name="previous_school"
+                                           class="form-control"
+                                           value="{{ old('previous_school') }}">
+
+                                    @error('previous_school')
+                                        <small class="text-danger">{{ $message }}</small>
+                                    @enderror
+                                </div>
+
+                                {{-- Nama Orang Tua --}}
+                                <div class="col-md-6">
+                                    <label class="form-label">Nama Orang Tua / Wali</label>
+                                    <input type="text"
+                                           name="parent_name"
+                                           class="form-control"
+                                           value="{{ old('parent_name') }}"
+                                           required>
+
+                                    @error('parent_name')
+                                        <small class="text-danger">{{ $message }}</small>
+                                    @enderror
+                                </div>
+
+                                {{-- No HP --}}
+                                <div class="col-md-6">
+                                    <label class="form-label">Nomor HP</label>
+                                    <input type="text"
+                                           name="phone"
+                                           class="form-control"
+                                           value="{{ old('phone') }}"
+                                           required>
+
+                                    @error('phone')
+                                        <small class="text-danger">{{ $message }}</small>
+                                    @enderror
+                                </div>
+
+                                {{-- Email --}}
+                                <div class="col-md-6">
+                                    <label class="form-label">Email</label>
+                                    <input type="email"
+                                           name="email"
+                                           class="form-control"
+                                           value="{{ old('email') }}"
+                                           required>
+
+                                    @error('email')
+                                        <small class="text-danger">{{ $message }}</small>
+                                    @enderror
+                                </div>
+
+                                {{-- Alamat --}}
+                                <div class="col-12">
+                                    <label class="form-label">Alamat</label>
+                                    <textarea name="address"
+                                              rows="3"
+                                              class="form-control"
+                                              required>{{ old('address') }}</textarea>
+
+                                    @error('address')
+                                        <small class="text-danger">{{ $message }}</small>
+                                    @enderror
+                                </div>
+
+                                {{-- Catatan --}}
+                                <div class="col-12">
+                                    <label class="form-label">Catatan Tambahan</label>
+                                    <textarea name="notes"
+                                              rows="3"
+                                              class="form-control">{{ old('notes') }}</textarea>
+
+                                    @error('notes')
+                                        <small class="text-danger">{{ $message }}</small>
+                                    @enderror
+                                </div>
+
+                            </div>
+
+                            {{-- Button --}}
+                            <div class="d-flex justify-content-between mt-4">
+
+                                <a href="{{ route('front.ppdb') }}" class="btn btn-outline-secondary">
+                                    Kembali
+                                </a>
+
+                                <button type="submit" class="btn btn-primary px-4">
+                                    Kirim Pendaftaran
+                                </button>
+
+                            </div>
+
+                        </form>
+
+                    </div>
                 </div>
-                <div class="col-md-3">
-                    <label class="form-label fw-semibold">Jenis Kelamin</label>
-                    <select name="gender" class="form-control" required>
-                        <option value="L">Laki-laki</option>
-                        <option value="P">Perempuan</option>
-                    </select>
-                </div>
-                <div class="col-md-3">
-                    <label class="form-label fw-semibold">Tempat Lahir</label>
-                    <input type="text" name="birth_place" class="form-control" required>
-                </div>
-                <div class="col-md-4">
-                    <label class="form-label fw-semibold">Tanggal Lahir</label>
-                    <input type="date" name="birth_date" class="form-control" required>
-                </div>
-                <div class="col-md-8">
-                    <label class="form-label fw-semibold">Sekolah Asal</label>
-                    <input type="text" name="previous_school" class="form-control">
-                </div>
-                <div class="col-md-6">
-                    <label class="form-label fw-semibold">Nama Orang Tua</label>
-                    <input type="text" name="parent_name" class="form-control" required>
-                </div>
-                <div class="col-md-6">
-                    <label class="form-label fw-semibold">Nomor HP</label>
-                    <input type="text" name="phone" class="form-control" required>
-                </div>
-                <div class="col-md-6">
-                    <label class="form-label fw-semibold">Email</label>
-                    <input type="email" name="email" class="form-control" required>
-                </div>
-                <div class="col-md-12">
-                    <label class="form-label fw-semibold">Alamat</label>
-                    <textarea name="address" class="form-control" rows="3" required></textarea>
-                </div>
-                <div class="col-md-12">
-                    <label class="form-label fw-semibold">Catatan (opsional)</label>
-                    <textarea name="notes" class="form-control" rows="2"></textarea>
-                </div>
+
             </div>
-
-            <div class="text-center mt-4">
-                <button type="submit" class="btn btn-primary px-5 py-2 rounded-pill">Kirim Pendaftaran</button>
-            </div>
-        </form>
+        </div>
     </div>
-</div>
+</section>
 @endsection

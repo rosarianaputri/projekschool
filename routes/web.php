@@ -1,5 +1,7 @@
 <?php
+use Illuminate\Support\Facades\Route;
 
+use App\Http\Controllers\Student\DashboardController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\FrontendController;
 use App\Http\Controllers\Admin\SitePageController;
@@ -8,7 +10,6 @@ use App\Http\Controllers\Admin\SiteSettingController;
 use App\Http\Controllers\Admin\TeacherController;
 use App\Http\Controllers\Admin\StudentController;   
 use App\Http\Controllers\frontend\PpdbController;
-use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Artisan;
 use App\Http\Controllers\AdminStudentLifeController;
 
@@ -122,6 +123,24 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
+
+Route::middleware(['auth','role:student'])->group(function () {
+
+});
+
+// ===========================
+// Dashboard Siswa
+// ===========================
+
+Route::middleware(['auth','role:student'])->group(function () {
+    // Dashboard siswa
+    Route::get('/student/dashboard', [DashboardController::class, 'index'])->name('student.dashboard');
+
+    // PPDB siswa
+    Route::get('/student/ppdb', [PpdbController::class, 'index'])->name('student.ppdb.index');
+    Route::get('/student/ppdb/formulir', [PpdbController::class, 'create'])->name('student.ppdb.form');
+    Route::post('/student/ppdb/formulir', [PpdbController::class, 'store'])->name('student.ppdb.store');
 });
 
 require __DIR__.'/auth.php';
