@@ -97,7 +97,7 @@
                                 <span>Academic</span>
                             </a>
                             <a href="{{ route('front.facilities') }}" class="dropdown-item" target="_blank">
-                                <i class="feather-building"></i>
+                                <i class="feather-grid"></i>
                                 <span>Facilities</span>
                             </a>
                             <a href="{{ route('front.student_life') }}" class="dropdown-item" target="_blank">
