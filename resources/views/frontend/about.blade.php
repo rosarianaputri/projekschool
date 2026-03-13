@@ -137,7 +137,6 @@
                 </div>
             </div>
         </div>
-        YANG KELIATAN DONG
     </section>
     @endif
 @endsection
