@@ -120,7 +120,7 @@
             </div>
 
             <div class="form-group">
-                <label for="password_confirmation"><i class="fa fa-lock"></i> Konfirmasi Password</label>
+                <label for="password_confirmation"><i class="fa fa-lock"></i> Konfirmasi Password  </label>
                 <input id="password_confirmation" type="password" name="password_confirmation" placeholder="Ulangi Password" required>
             </div>
 
