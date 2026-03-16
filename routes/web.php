@@ -55,6 +55,10 @@ Route::get('/dashboard', function () {
 Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/settings/logo', [SiteSettingController::class, 'editLogo'])->name('settings.logo.edit');
     Route::post('/settings/logo', [SiteSettingController::class, 'updateLogo'])->name('settings.logo.update');
+    Route::get('/settings/footer', [SiteSettingController::class, 'editFooter'])->name('settings.footer.edit');
+    Route::post('/settings/footer', [SiteSettingController::class, 'updateFooter'])->name('settings.footer.update');
+    Route::post('/settings/footer/reset', [SiteSettingController::class, 'resetFooter'])->name('settings.footer.reset');
+    Route::delete('/settings/footer', [SiteSettingController::class, 'destroyFooter'])->name('settings.footer.destroy');
 
     Route::get('/pages/{slug}', [SitePageController::class, 'edit'])->name('pages.edit');
     Route::post('/pages/{slug}', [SitePageController::class, 'update'])->name('pages.update');
