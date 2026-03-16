@@ -11,7 +11,6 @@ use App\Http\Controllers\Admin\TeacherController;
 use App\Http\Controllers\Admin\StudentController;   
 use App\Http\Controllers\frontend\PpdbController;
 use Illuminate\Support\Facades\Artisan;
-use App\Http\Controllers\AdminStudentLifeController;
 
 Route::get('/', function () {
     return redirect()->route('front.home');
@@ -103,15 +102,6 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(
     Route::patch('/ppdb/{ppdbApplication}/acc', [AdminPpdbController::class, 'approve'])->name('ppdb.acc');
     Route::patch('/ppdb/{ppdbApplication}/reject', [AdminPpdbController::class, 'reject'])->name('ppdb.reject');
     Route::delete('/ppdb/{ppdbApplication}', [AdminPpdbController::class, 'destroy'])->name('ppdb.destroy');
-});
-
-Route::prefix('admin')->name('admin.')->group(function() {
-    Route::get('/admin/student-life', [AdminStudentLifeController::class, 'edit'])
-    ->name('admin.student_life'); // hapus ".edit"
-
-    Route::post('/student-life/update', [AdminStudentLifeController::class, 'update'])->name('student_life.update');
-    Route::post('/student-life/reset', [AdminStudentLifeController::class, 'reset'])->name('student_life.reset');
-    Route::delete('/student-life/delete', [AdminStudentLifeController::class, 'destroy'])->name('student_life.destroy');
 });
 
 // Route::get('/x', function () {
