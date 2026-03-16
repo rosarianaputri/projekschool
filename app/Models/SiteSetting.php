@@ -25,4 +25,9 @@ class SiteSetting extends Model
             ['value' => $value]
         );
     }
+
+    public static function deleteValue(string $key): void
+    {
+        static::query()->where('key', $key)->delete();
+    }
 }

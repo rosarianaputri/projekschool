@@ -136,6 +136,54 @@ class SiteSettingController extends Controller
         ]);
     }
 
+        public function updateFacilities(Request $request): RedirectResponse
+        {
+            $existing = SiteSetting::getValue('facilities_page');
+            $existingData = $existing ? json_decode($existing, true) : ['sections' => []];
+
+            $sections = [];
+            $inputSections = $request->input('sections', []);
+            $files = $request->file('sections', []);
+
+            foreach ($inputSections as $i => $sectionInput) {
+                $section = [
+                    'title' => $sectionInput['title'] ?? '',
+                    'text'  => $sectionInput['text'] ?? '',
+                ];
+
+                if (!empty($files[$i]['image']) && $files[$i]['image']->isValid()) {
+                    $oldImage = $sectionInput['existing_image'] ?? null;
+                    if ($oldImage && Storage::disk('public')->exists($oldImage)) {
+                        Storage::disk('public')->delete($oldImage);
+                    }
+                    $path = $files[$i]['image']->store('site/facilities', 'public');
+                    $section['image'] = $path;
+                    $section['image_url'] = Storage::url($path);
+                } else {
+                    $section['image'] = $sectionInput['existing_image'] ?? null;
+                    $section['image_url'] = $section['image'] ? Storage::url($section['image']) : null;
+                }
+
+                $sections[] = $section;
+            }
+
+            SiteSetting::setValue('facilities_page', json_encode(['sections' => $sections], JSON_PRETTY_PRINT));
+
+            return back()->with('status', 'facilities_updated');
+        }
+
+        public function resetFacilities(): RedirectResponse
+        {
+            SiteSetting::deleteValue('facilities_page');
+            return back()->with('status', 'facilities_reset');
+        }
+
+        public function destroyFacilities(): RedirectResponse
+        {
+            SiteSetting::deleteValue('facilities_page');
+            return back()->with('status', 'facilities_deleted');
+        }
+
     /**
      * ✅ HALAMAN STUDENT LIFE
      */
