@@ -190,16 +190,191 @@ class SiteSettingController extends Controller
     public function editStudentLife()
     {
         $data = SiteSetting::getValue('student_life_page');
+        $data = $data ? json_decode($data, true) : [];
+
+        if (empty($data['extracurricular']['items']) || !is_array($data['extracurricular']['items'])) {
+            $data['extracurricular']['items'] = [
+                [
+                    'title' => 'Sports and Teamwork',
+                    'text' => 'Students build discipline, collaboration, and confidence through regular sports programs.',
+                    'image' => '/images/ekstrakulikuler/futsal.jpg',
+                ],
+                [
+                    'title' => 'Scouting Program',
+                    'text' => 'Scouting activities strengthen leadership, responsibility, and resilience in daily life.',
+                    'image' => '/images/ekstrakulikuler/pramuka.jpg',
+                ],
+                [
+                    'title' => 'Creative Arts Club',
+                    'text' => 'Students express their ideas and creativity through visual art and stage performances.',
+                    'image' => '/images/ekstrakulikuler/seni.jpg',
+                ],
+            ];
+        }
+
+        if (empty($data['achievements']['items']) || !is_array($data['achievements']['items'])) {
+            $data['achievements']['items'] = [
+                [
+                    'title' => 'Science Competition Winner',
+                    'text' => 'Our students earned top recognition in regional science competitions this year.',
+                    'image' => '/images/award/sainjuara.png',
+                ],
+                [
+                    'title' => 'Basketball Championship',
+                    'text' => 'The school basketball team won the championship with teamwork and perseverance.',
+                    'image' => '/images/award/basketjuara.jpg',
+                ],
+                [
+                    'title' => 'Art Excellence Award',
+                    'text' => 'Students received awards for outstanding creativity in painting and design.',
+                    'image' => '/images/award/lukis.jpg',
+                ],
+            ];
+        }
+
+        if (empty($data['gallery']['image'])) {
+            $data['gallery']['image'] = '/images/galeri/kelulusan1.png';
+        }
+
+        if (empty($data['extracurricular']['title'])) {
+            $data['extracurricular']['title'] = 'Extracurricular Activities';
+        }
+
+        if (empty($data['achievements']['title'])) {
+            $data['achievements']['title'] = 'Student Achievements';
+        }
+
+        if (empty($data['gallery']['title'])) {
+            $data['gallery']['title'] = 'Student Life Gallery';
+        }
+
+        if (empty($data['gallery']['text'])) {
+            $data['gallery']['text'] = 'A quick look into vibrant moments from classes, projects, and student events.';
+        }
+
+        $toUrl = function (?string $path): ?string {
+            if (!$path) {
+                return null;
+            }
+
+            $lower = Str::lower($path);
+            if (Str::startsWith($lower, ['http://', 'https://', '/'])) {
+                return $path;
+            }
+
+            return Storage::url($path);
+        };
+
+        if (!empty($data['extracurricular']['items']) && is_array($data['extracurricular']['items'])) {
+            foreach ($data['extracurricular']['items'] as $index => $item) {
+                if (!is_array($item) || empty($item['image'])) {
+                    continue;
+                }
+                $data['extracurricular']['items'][$index]['image_url'] = $toUrl($item['image']);
+            }
+        }
+
+        if (!empty($data['achievements']['items']) && is_array($data['achievements']['items'])) {
+            foreach ($data['achievements']['items'] as $index => $item) {
+                if (!is_array($item) || empty($item['image'])) {
+                    continue;
+                }
+                $data['achievements']['items'][$index]['image_url'] = $toUrl($item['image']);
+            }
+        }
+
+        if (!empty($data['gallery']['image'])) {
+            $data['gallery']['image_url'] = $toUrl($data['gallery']['image']);
+        }
+
         return view('admin.settings.student-life', [
-            'data' => $data ? json_decode($data, true) : [],
+            'data' => $data,
         ]);
     }
 
     public function updateStudentLife(Request $request): RedirectResponse
     {
-        // Ambil semua data dari form
-        $data = $request->except(['_token']);
-        // Simpan sebagai JSON baru, menggantikan data lama sepenuhnya
+        $extracurricularInput = $request->input('extracurricular_items', []);
+        $achievementInput = $request->input('achievements_items', []);
+
+        $buildItems = function (array $itemsInput, string $fileKey, string $folder) use ($request): array {
+            $result = [];
+            $files = $request->file($fileKey, []);
+
+            foreach ($itemsInput as $index => $itemInput) {
+                if (!is_array($itemInput)) {
+                    continue;
+                }
+
+                $title = trim((string) ($itemInput['title'] ?? ''));
+                $text = trim((string) ($itemInput['text'] ?? ''));
+                $existingImage = trim((string) ($itemInput['existing_image'] ?? ''));
+
+                $file = null;
+                if (isset($files[$index]['image']) && $files[$index]['image'] && $files[$index]['image']->isValid()) {
+                    $file = $files[$index]['image'];
+                }
+
+                $image = $existingImage !== '' ? $existingImage : null;
+                if ($file) {
+                    if ($image && Str::startsWith($image, 'site/student-life/') && Storage::disk('public')->exists($image)) {
+                        Storage::disk('public')->delete($image);
+                    }
+
+                    $image = $file->store($folder, 'public');
+                }
+
+                if ($title === '' && $text === '' && !$image) {
+                    continue;
+                }
+
+                $row = [
+                    'title' => $title,
+                    'text' => $text,
+                ];
+
+                if ($image) {
+                    $row['image'] = $image;
+                    $row['image_url'] = Storage::url($image);
+                }
+
+                $result[] = $row;
+            }
+
+            return $result;
+        };
+
+        $galleryImage = trim((string) $request->input('existing_gallery_image', ''));
+        $galleryUpload = $request->file('gallery_image');
+
+        if ($galleryUpload && $galleryUpload->isValid()) {
+            if ($galleryImage !== '' && Str::startsWith($galleryImage, 'site/student-life/') && Storage::disk('public')->exists($galleryImage)) {
+                Storage::disk('public')->delete($galleryImage);
+            }
+
+            $galleryImage = $galleryUpload->store('site/student-life/gallery', 'public');
+        }
+
+        $data = [
+            'extracurricular' => [
+                'title' => trim((string) $request->input('extracurricular_title', 'Extracurricular Activities')),
+                'items' => $buildItems($extracurricularInput, 'extracurricular_items', 'site/student-life/extracurricular'),
+            ],
+            'achievements' => [
+                'title' => trim((string) $request->input('achievements_title', 'Student Achievements')),
+                'items' => $buildItems($achievementInput, 'achievements_items', 'site/student-life/achievements'),
+            ],
+            'gallery' => [
+                'title' => trim((string) $request->input('gallery_title', 'Student Life Gallery')),
+                'text' => trim((string) $request->input('gallery_text', 'Captured moments from our student community.')),
+            ],
+        ];
+
+        if ($galleryImage !== '') {
+            $data['gallery']['image'] = $galleryImage;
+            $data['gallery']['image_url'] = Storage::url($galleryImage);
+        }
+
         SiteSetting::setValue('student_life_page', json_encode($data, JSON_PRETTY_PRINT));
 
         return back()->with('status', 'student_life_updated');

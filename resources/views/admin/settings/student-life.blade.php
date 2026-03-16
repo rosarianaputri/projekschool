@@ -17,11 +17,11 @@
             <div class="card shadow-sm border-0">
                 <div class="card-body">
                     @if (session('status') === 'student_life_updated')
-                        <div class="alert alert-success">Student Life page updated ✅</div>
+                        <div class="alert alert-success">Student Life page updated successfully.</div>
                     @elseif (session('status') === 'student_life_reset')
-                        <div class="alert alert-warning">Student Life page reset ⚠️</div>
+                        <div class="alert alert-warning">Student Life page has been reset.</div>
                     @elseif (session('status') === 'student_life_deleted')
-                        <div class="alert alert-danger">Student Life page deleted ❌</div>
+                        <div class="alert alert-danger">Student Life page has been deleted.</div>
                     @endif
 
                     <form method="POST" action="{{ route('admin.student_life.update') }}" enctype="multipart/form-data">
@@ -32,14 +32,14 @@
                         <div class="mb-3">
                             <label class="form-label fw-semibold">Section Title</label>
                             <input type="text" name="extracurricular_title" class="form-control" 
-                                   value="{{ old('extracurricular_title', $extracurricular['title'] ?? 'Extracurricular') }}" required>
+                                   value="{{ old('extracurricular_title', $extracurricular['title'] ?? 'Extracurricular Activities') }}" required>
                         </div>
 
                         <div id="extracurricular_container">
                             @foreach($extracurricularItems as $index => $item)
                                 <div class="extracurricular-item border rounded-3 bg-light p-3 mb-3 position-relative" data-index="{{ $index }}">
                                     <div class="position-absolute top-0 end-0 mt-2 me-2">
-                                        <button type="button" class="btn btn-outline-danger btn-icon remove-extracurricular" title="Hapus">
+                                        <button type="button" class="btn btn-outline-danger btn-icon remove-extracurricular" title="Remove">
                                             <i class="fas fa-trash"></i>
                                         </button>
                                     </div>
@@ -49,6 +49,7 @@
                                             @if(!empty($item['image_url']))
                                                 <img src="{{ $item['image_url'] }}" class="img-thumbnail mb-2" style="height:120px;">
                                             @endif
+                                            <input type="hidden" name="extracurricular_items[{{ $index }}][existing_image]" value="{{ $item['image'] ?? '' }}">
                                             <input type="file" class="form-control" name="extracurricular_items[{{ $index }}][image]" accept="image/*">
                                         </div>
                                         <div class="col-md-4">
@@ -73,36 +74,39 @@
                         <div class="mb-3">
                             <label class="form-label fw-semibold">Section Title</label>
                             <input type="text" name="achievements_title" class="form-control" 
-                                   value="{{ old('achievements_title', $achievements['title'] ?? 'Achievements & Awards') }}" required>
+                                   value="{{ old('achievements_title', $achievements['title'] ?? 'Student Achievements') }}" required>
                         </div>
 
-                        @foreach($achievementItems as $index => $item)
-                            <div class="achievement-item border rounded-3 bg-light p-3 mb-3 position-relative" data-index="{{ $index }}">
-                                <div class="position-absolute top-0 end-0 mt-2 me-2">
-                                    <button type="button" class="btn btn-outline-danger btn-icon remove-achievement" title="Hapus">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
+                        <div id="achievements_container">
+                            @foreach($achievementItems as $index => $item)
+                                <div class="achievement-item border rounded-3 bg-light p-3 mb-3 position-relative" data-index="{{ $index }}">
+                                    <div class="position-absolute top-0 end-0 mt-2 me-2">
+                                        <button type="button" class="btn btn-outline-danger btn-icon remove-achievement" title="Remove">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <label class="form-label">Image</label>
+                                            @if(!empty($item['image_url']))
+                                                <img src="{{ $item['image_url'] }}" class="img-thumbnail mb-2" style="height:120px;">
+                                            @endif
+                                            <input type="hidden" name="achievements_items[{{ $index }}][existing_image]" value="{{ $item['image'] ?? '' }}">
+                                            <input type="file" class="form-control" name="achievements_items[{{ $index }}][image]" accept="image/*">
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label class="form-label">Title</label>
+                                            <input type="text" class="form-control mb-2" name="achievements_items[{{ $index }}][title]" 
+                                                value="{{ $item['title'] ?? '' }}" required>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label class="form-label">Description</label>
+                                            <textarea class="form-control" rows="3" name="achievements_items[{{ $index }}][text]" required>{{ $item['text'] ?? '' }}</textarea>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <label class="form-label">Image</label>
-                                        @if(!empty($item['image_url']))
-                                            <img src="{{ $item['image_url'] }}" class="img-thumbnail mb-2" style="height:120px;">
-                                        @endif
-                                        <input type="file" class="form-control" name="achievements_items[{{ $index }}][image]" accept="image/*">
-                                    </div>
-                                    <div class="col-md-4">
-                                        <label class="form-label">Title</label>
-                                        <input type="text" class="form-control mb-2" name="achievements_items[{{ $index }}][title]" 
-                                               value="{{ $item['title'] ?? '' }}" required>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <label class="form-label">Description</label>
-                                        <textarea class="form-control" rows="3" name="achievements_items[{{ $index }}][text]" required>{{ $item['text'] ?? '' }}</textarea>
-                                    </div>
-                                </div>
-                            </div>
-                        @endforeach
+                            @endforeach
+                        </div>
                         <button type="button" id="add_achievement" class="btn btn-outline-primary btn-sm mt-2">+ Add Achievement</button>
 
                         <hr class="my-4">
@@ -112,7 +116,7 @@
                         <div class="mb-3">
                             <label class="form-label fw-semibold">Section Title</label>
                             <input type="text" name="gallery_title" class="form-control" 
-                                   value="{{ old('gallery_title', $gallery['title'] ?? 'Gallery') }}" required>
+                                value="{{ old('gallery_title', $gallery['title'] ?? 'Student Life Gallery') }}" required>
                         </div>
                         <div class="mb-3">
                             <label class="form-label fw-semibold">Description</label>
@@ -123,6 +127,7 @@
                             @if(!empty($gallery['image_url']))
                                 <img src="{{ $gallery['image_url'] }}" alt="Gallery" class="img-thumbnail mb-2" style="height:200px;">
                             @endif
+                            <input type="hidden" name="existing_gallery_image" value="{{ $gallery['image'] ?? '' }}">
                             <input type="file" name="gallery_image" class="form-control" accept="image/*">
                         </div>
 
@@ -188,11 +193,12 @@ document.addEventListener('DOMContentLoaded', () => {
             el.className = 'extracurricular-item border rounded-3 bg-light p-3 mb-3 position-relative fadeIn';
             el.innerHTML = `
                 <div class="position-absolute top-0 end-0 mt-2 me-2">
-                    <button type="button" class="btn btn-outline-danger btn-icon remove-extracurricular" title="Hapus"><i class="fas fa-trash"></i></button>
+                    <button type="button" class="btn btn-outline-danger btn-icon remove-extracurricular" title="Remove"><i class="fas fa-trash"></i></button>
                 </div>
                 <div class="row">
                     <div class="col-md-4">
                         <label class="form-label">Image</label>
+                        <input type="hidden" name="extracurricular_items[${exIndex}][existing_image]" value="">
                         <input type="file" class="form-control" name="extracurricular_items[${exIndex}][image]" accept="image/*">
                     </div>
                     <div class="col-md-4">
@@ -210,16 +216,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // === Add Achievement ===
         if (btn.id === 'add_achievement') {
-            const c = document.querySelector('.btn-outline-primary#add_achievement').previousElementSibling;
+            const c = document.getElementById('achievements_container');
             const el = document.createElement('div');
             el.className = 'achievement-item border rounded-3 bg-light p-3 mb-3 position-relative fadeIn';
             el.innerHTML = `
                 <div class="position-absolute top-0 end-0 mt-2 me-2">
-                    <button type="button" class="btn btn-outline-danger btn-icon remove-achievement" title="Hapus"><i class="fas fa-trash"></i></button>
+                    <button type="button" class="btn btn-outline-danger btn-icon remove-achievement" title="Remove"><i class="fas fa-trash"></i></button>
                 </div>
                 <div class="row">
                     <div class="col-md-4">
                         <label class="form-label">Image</label>
+                        <input type="hidden" name="achievements_items[${achIndex}][existing_image]" value="">
                         <input type="file" class="form-control" name="achievements_items[${achIndex}][image]" accept="image/*">
                     </div>
                     <div class="col-md-4">
