@@ -103,13 +103,8 @@
     </section>
 
     <section id="announcement" class="container my-5">
-        <div class="d-flex justify-content-between align-items-center mb-4">
+        <div class="mb-4">
             <h2 class="mb-0">Announcements</h2>
-            @if(auth()->check() && auth()->user()->role === 'admin')
-                <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#addAnnouncementModal">
-                    <i class="fas fa-plus"></i> Add Announcement
-                </button>
-            @endif
         </div>
 
         @if(isset($informationData['announcements']) && !empty($informationData['announcements']))
@@ -138,13 +133,8 @@
     </section>
 
     <section id="event" class="container my-5">
-        <div class="d-flex justify-content-between align-items-center mb-4">
+        <div class="mb-4">
             <h2 class="mb-0">Events</h2>
-            @if(auth()->check() && auth()->user()->role === 'admin')
-                <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#addEventModal">
-                    <i class="fas fa-plus"></i> Add Event
-                </button>
-            @endif
         </div>
 
         @if(isset($informationData['events']) && !empty($informationData['events']))
@@ -172,150 +162,11 @@
         @endif
     </section>
 
-    <!-- Add Announcement Modal -->
-    @if(auth()->check() && auth()->user()->role === 'admin')
-        <div class="modal fade" id="addAnnouncementModal" tabindex="-1">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Add Announcement</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                    </div>
-                    <div class="modal-body">
-                        <form id="announcementForm">
-                            <div class="mb-3">
-                                <label class="form-label">Title</label>
-                                <input type="text" class="form-control" id="announcementTitle" required>
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label">Date</label>
-                                <input type="date" class="form-control" id="announcementDate" required>
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label">Content</label>
-                                <textarea class="form-control" id="announcementContent" rows="3" required></textarea>
-                            </div>
-                        </form>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                        <button type="button" class="btn btn-primary" onclick="saveAnnouncement()">Save</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Add Event Modal -->
-        <div class="modal fade" id="addEventModal" tabindex="-1">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Add Event</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                    </div>
-                    <div class="modal-body">
-                        <form id="eventForm">
-                            <div class="mb-3">
-                                <label class="form-label">Title</label>
-                                <input type="text" class="form-control" id="eventTitle" required>
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label">Date</label>
-                                <input type="date" class="form-control" id="eventDate" required>
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label">Content</label>
-                                <textarea class="form-control" id="eventContent" rows="3" required></textarea>
-                            </div>
-                        </form>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                        <button type="button" class="btn btn-primary" onclick="saveEvent()">Save</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    @endif
     @endif
 @endsection
 
 @section('scripts')
 <script>
-function saveAnnouncement() {
-    const title = document.getElementById('announcementTitle').value;
-    const date = document.getElementById('announcementDate').value;
-    const content = document.getElementById('announcementContent').value;
-    
-    if (!title || !date || !content) {
-        alert('Please fill all fields');
-        return;
-    }
-    
-    // Simpan ke database (implementasi backend diperlukan)
-    fetch('/api/announcements', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-        },
-        body: JSON.stringify({
-            title: title,
-            date: date,
-            content: content
-        })
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            location.reload();
-        } else {
-            alert('Error saving announcement');
-        }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        alert('Error saving announcement');
-    });
-}
-
-function saveEvent() {
-    const title = document.getElementById('eventTitle').value;
-    const date = document.getElementById('eventDate').value;
-    const content = document.getElementById('eventContent').value;
-    
-    if (!title || !date || !content) {
-        alert('Please fill all fields');
-        return;
-    }
-    
-    // Simpan ke database (implementasi backend diperlukan)
-    fetch('/api/events', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-        },
-        body: JSON.stringify({
-            title: title,
-            date: date,
-            content: content
-        })
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            location.reload();
-        } else {
-            alert('Error saving event');
-        }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        alert('Error saving event');
-    });
-}
-
 function editAnnouncement(id) {
     // Implementasi edit announcement
     console.log('Edit announcement:', id);

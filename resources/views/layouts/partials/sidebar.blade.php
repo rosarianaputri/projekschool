@@ -104,6 +104,12 @@
                     </a>
                 </li>
                 <li class="nxl-item nxl-hasmenu">
+                    <a href="{{ route('admin.settings.footer.edit') }}" class="nxl-link">
+                        <span class="nxl-micon"><i class="feather-layout"></i></span>
+                        <span class="nxl-mtext">Footer</span>
+                    </a>
+                </li>
+                <li class="nxl-item nxl-hasmenu">
                     <a href="{{ route('profile.edit') }}" class="nxl-link">
                         <span class="nxl-micon"><i class="feather-user"></i></span>
                         <span class="nxl-mtext">Profile</span>

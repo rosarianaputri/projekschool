@@ -257,6 +257,89 @@ class SiteSettingController extends Controller
             'data' => $data ? json_decode($data, true) : [],
         ]);
     }
+
+    private function normalizeFooterItems(mixed $items, array $fields): array
+    {
+        if (!is_array($items)) {
+            return [];
+        }
+
+        $normalized = [];
+
+        foreach ($items as $item) {
+            if (!is_array($item)) {
+                continue;
+            }
+
+            $row = [];
+            $hasContent = false;
+
+            foreach ($fields as $field) {
+                $value = trim((string) ($item[$field] ?? ''));
+                $row[$field] = $value;
+                $hasContent = $hasContent || $value !== '';
+            }
+
+            if ($hasContent) {
+                $normalized[] = $row;
+            }
+        }
+
+        return $normalized;
+    }
+
+    public function editFooter()
+    {
+        return view('admin.settings.footer', [
+            'data' => SiteSetting::getFooterData(),
+            'hasStoredData' => SiteSetting::getValue('footer_content') !== null,
+        ]);
+    }
+
+    public function updateFooter(Request $request): RedirectResponse
+    {
+        $defaults = SiteSetting::getFooterDefaults();
+
+        $data = [
+            'brand_name' => trim((string) $request->input('brand_name', $defaults['brand_name'])),
+            'brand_description' => trim((string) $request->input('brand_description', $defaults['brand_description'])),
+            'address' => trim((string) $request->input('address', $defaults['address'])),
+            'email' => trim((string) $request->input('email', $defaults['email'])),
+            'phone' => trim((string) $request->input('phone', $defaults['phone'])),
+            'map_embed_url' => trim((string) $request->input('map_embed_url', $defaults['map_embed_url'])),
+            'quick_links_title' => trim((string) $request->input('quick_links_title', $defaults['quick_links_title'])),
+            'quick_links' => $this->normalizeFooterItems($request->input('quick_links', []), ['label', 'url']),
+            'programs_title' => trim((string) $request->input('programs_title', $defaults['programs_title'])),
+            'programs' => $this->normalizeFooterItems($request->input('programs', []), ['label', 'url', 'icon']),
+            'social_title' => trim((string) $request->input('social_title', $defaults['social_title'])),
+            'social_description' => trim((string) $request->input('social_description', $defaults['social_description'])),
+            'social_links' => $this->normalizeFooterItems($request->input('social_links', []), ['platform', 'url', 'icon']),
+            'newsletter_enabled' => $request->boolean('newsletter_enabled') ? '1' : '0',
+            'newsletter_title' => trim((string) $request->input('newsletter_title', $defaults['newsletter_title'])),
+            'newsletter_placeholder' => trim((string) $request->input('newsletter_placeholder', $defaults['newsletter_placeholder'])),
+            'newsletter_button_text' => trim((string) $request->input('newsletter_button_text', $defaults['newsletter_button_text'])),
+            'bottom_copyright' => trim((string) $request->input('bottom_copyright', $defaults['bottom_copyright'])),
+            'bottom_links' => $this->normalizeFooterItems($request->input('bottom_links', []), ['label', 'url']),
+        ];
+
+        SiteSetting::setValue('footer_content', json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
+
+        return back()->with('status', 'footer_updated');
+    }
+
+    public function resetFooter(): RedirectResponse
+    {
+        SiteSetting::deleteValue('footer_content');
+
+        return back()->with('status', 'footer_reset');
+    }
+
+    public function destroyFooter(): RedirectResponse
+    {
+        SiteSetting::deleteValue('footer_content');
+
+        return back()->with('status', 'footer_deleted');
+    }
 }
 
 
