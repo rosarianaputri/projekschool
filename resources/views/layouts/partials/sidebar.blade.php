@@ -8,7 +8,7 @@
     <div class="navbar-wrapper">
         <div class="m-header" style="display: flex; align-items: center; justify-content: center; height: 70px;">
             <a href="{{ route('dashboard') }}" class="b-brand" style="display: flex; align-items: center; justify-content: center; padding: 8px 12px;">
-                <img src="{{ $logoUrl }}" alt="Logo" class="logo logo-lg" style="max-height: 50px; width: auto; object-fit: contain;" />
+                <img src="{{ $logoUrl }}" alt="Logo" class="logo logo-lg" style="max-height: 90px; width: auto; object-fit: contain;" />
             </a>
         </div>
 
