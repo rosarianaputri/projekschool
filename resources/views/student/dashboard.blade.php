@@ -10,7 +10,7 @@
 
     <!-- FORMULIR PENDAFTARAN -->
     <div class="col-md-4">
-        <a href="{{ route('student.formulir') }}" style="text-decoration:none;">
+        <a href="{{ route('student.ppdb.form') }}" style="text-decoration:none;">
             <div class="card">
                 <div class="card-body text-center">
 
@@ -27,7 +27,7 @@
 
     <!-- UPLOAD BERKAS -->
     <div class="col-md-4">
-        <a href="{{ route('student.upload') }}" style="text-decoration:none;">
+        <a href="{{ route('student.ppdb.form') }}" style="text-decoration:none;">
             <div class="card">
                 <div class="card-body text-center">
 
@@ -44,7 +44,7 @@
 
     <!-- STATUS PENDAFTARAN -->
     <div class="col-md-4">
-        <a href="{{ route('student.status') }}" style="text-decoration:none;">
+        <a href="{{ route('student.ppdb.index') }}" style="text-decoration:none;">
             <div class="card">
                 <div class="card-body text-center">
 
