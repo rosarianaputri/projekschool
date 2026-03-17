@@ -33,9 +33,9 @@
 
     <header class="nxl-header">
         <div class="header-wrapper">
-            <div class="header-left d-flex align-items-center gap-4">
-                <a href="{{ route('dashboard') }}" class="d-flex align-items-center">
-                    <img src="{{ $logoUrl }}" alt="Logo" style="height:90px; width:auto; object-fit:contain;">
+            <div class="header-left d-flex align-items-center gap-2">
+                <a href="{{ route('dashboard') }}" class="d-flex align-items-center py-2">
+                    <img src="{{ $logoUrl }}" alt="Logo" style="height:45px; width:auto; object-fit:contain;">
                 </a>
                 <a href="javascript:void(0);" class="nxl-head-mobile-toggler" id="mobile-collapse">
                     <div class="hamburger hamburger--arrowturn">

@@ -2,6 +2,8 @@
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\Student\DashboardController;
+use App\Http\Controllers\Student\UploadController;
+use App\Http\Controllers\Student\StatusController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\FrontendController;
 use App\Http\Controllers\Admin\SitePageController;
@@ -131,9 +133,16 @@ Route::middleware(['auth','role:student'])->group(function () {
     // Dashboard siswa
     Route::get('/student/dashboard', [DashboardController::class, 'index'])->name('student.dashboard');
 
+    // Upload berkas
+    Route::get('/student/upload', [UploadController::class, 'index'])->name('student.upload');
+    Route::post('/student/upload', [UploadController::class, 'store'])->name('student.upload.store');
+
+    // Status pendaftaran
+    Route::get('/student/status', [StatusController::class, 'index'])->name('student.status');
+
     // PPDB siswa
     Route::get('/student/ppdb', [PpdbController::class, 'index'])->name('student.ppdb.index');
-    Route::get('/student/ppdb/formulir', [PpdbController::class, 'create'])->name('student.ppdb.form');
+    Route::get('/student/ppdb/formulir', [PpdbController::class, 'create'])->name('student.formulir');
     Route::post('/student/ppdb/formulir', [PpdbController::class, 'store'])->name('student.ppdb.store');
 });
 
