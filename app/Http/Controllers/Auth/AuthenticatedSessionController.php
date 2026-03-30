@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
+use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -23,31 +24,15 @@ class AuthenticatedSessionController extends Controller
      * Proses login user
      */
     public function store(LoginRequest $request): RedirectResponse
-{
-    // Autentikasi user
-    $request->authenticate();
+    {
+        $request->authenticate();
+        $request->session()->regenerate();
 
-    // Regenerate session
-    $request->session()->regenerate();
+        /** @var User $user */
+        $user = Auth::user();
 
-    $user = Auth::user();
-
-    // Redirect berdasarkan role
-    if ($user->role === 'admin') {
-        return redirect()->intended('/admin/home');
+        return redirect()->intended($user->dashboardPath());
     }
-
-    if ($user->role === 'teacher') {
-        return redirect()->intended('/teacher/dashboard');
-    }
-
-    if ($user->role === 'student') {
-        return redirect()->intended('/student/dashboard');
-    }
-
-    // default fallback
-    return redirect('/');
-}
 
     /**
      * Logout user
