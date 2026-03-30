@@ -12,7 +12,9 @@ use App\Http\Controllers\Admin\SiteSettingController;
 use App\Http\Controllers\Admin\TeacherController;
 use App\Http\Controllers\Admin\StudentController;   
 use App\Http\Controllers\frontend\PpdbController;
+use App\Models\User;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Http\Request;
 
 Route::get('/', function () {
     return redirect()->route('front.home');
@@ -49,11 +51,14 @@ Route::get('/news-art', function () {
     return view('frontend.news-art');
 })->name('front.news-art');
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
+Route::get('/dashboard', function (Request $request) {
+    /** @var User $user */
+    $user = $request->user();
+
+    return redirect()->to($user->dashboardPath());
 })->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(function () {
+Route::middleware(['auth', 'verified', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/settings/logo', [SiteSettingController::class, 'editLogo'])->name('settings.logo.edit');
     Route::post('/settings/logo', [SiteSettingController::class, 'updateLogo'])->name('settings.logo.update');
     Route::get('/settings/footer', [SiteSettingController::class, 'editFooter'])->name('settings.footer.edit');
@@ -110,7 +115,7 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(
 //     return view('admin.index');
 // })->middleware(['auth', 'verified'])->name('admin.index');
 
-Route::prefix('admin')->middleware(['auth'])->group(function () {
+Route::prefix('admin')->middleware(['auth', 'role:admin'])->group(function () {
     Route::resource('teachers', TeacherController::class);
     Route::resource('students', StudentController::class);
 });
@@ -121,8 +126,8 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-Route::middleware(['auth','role:student'])->group(function () {
-
+Route::middleware(['auth', 'role:teacher'])->prefix('teacher')->name('teacher.')->group(function () {
+    Route::view('/dashboard', 'teacher.dashboard')->name('dashboard');
 });
 
 // ===========================

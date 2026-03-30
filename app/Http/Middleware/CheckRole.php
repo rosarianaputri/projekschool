@@ -9,10 +9,26 @@ class CheckRole
 {
     public function handle(Request $request, Closure $next, $role)
     {
-        if (Auth::check() && Auth::user()->role == $role) {
+        if (! Auth::check()) {
+            abort(403);
+        }
+
+        $expectedRole = $this->normalizeRole((string) $role);
+        $actualRole = $this->normalizeRole((string) Auth::user()->role);
+
+        if ($expectedRole === $actualRole) {
             return $next($request);
         }
 
         abort(403);
+    }
+
+    private function normalizeRole(string $role): string
+    {
+        return match (strtolower($role)) {
+            'guru' => 'teacher',
+            'siswa' => 'student',
+            default => strtolower($role),
+        };
     }
 }

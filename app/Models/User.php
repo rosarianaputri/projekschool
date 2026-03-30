@@ -21,6 +21,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'role',
     ];
 
     /**
@@ -44,5 +45,17 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function dashboardPath(): string
+    {
+        return match (strtolower((string) $this->role)) {
+            'admin' => '/admin/home',
+            'guru',
+            'teacher' => '/teacher/dashboard',
+            'siswa',
+            'student' => '/student/dashboard',
+            default => '/home',
+        };
     }
 }
