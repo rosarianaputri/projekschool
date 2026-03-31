@@ -1,4 +1,12 @@
 <nav x-data="{ open: false }" class="bg-white border-b border-gray-100">
+    @php
+        $user = Auth::user();
+        $role = strtolower((string) ($user->role ?? ''));
+        $dashboardHref = $user ? $user->dashboardPath() : route('login');
+        $isAdmin = $role === 'admin';
+        $isStudent = in_array($role, ['student', 'siswa'], true);
+        $isTeacher = in_array($role, ['teacher', 'guru'], true);
+    @endphp
     
     <!-- Primary Navigation Menu -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -58,35 +66,49 @@
 
                     <x-slot name="content">
 
-                        <x-dropdown-link href="/admin/home">
+                        <x-dropdown-link href="{{ $dashboardHref }}">
                             Dashboard
                         </x-dropdown-link>
 
-                        <x-dropdown-link href="/admin/about">
-                            About
-                        </x-dropdown-link>
+                        @if ($isAdmin)
+                            <x-dropdown-link href="/admin/about">
+                                About
+                            </x-dropdown-link>
 
-                        <x-dropdown-link href="/admin/academic">
-                            Academic
-                        </x-dropdown-link>
+                            <x-dropdown-link href="/admin/academic">
+                                Academic
+                            </x-dropdown-link>
 
-                        <x-dropdown-link href="/admin/facilities">
-                            Facilities
-                        </x-dropdown-link>
+                            <x-dropdown-link href="/admin/facilities">
+                                Facilities
+                            </x-dropdown-link>
 
-                        <x-dropdown-link href="/admin/student-life">
-                            Student Life
-                        </x-dropdown-link>
+                            <x-dropdown-link href="/admin/student-life">
+                                Student Life
+                            </x-dropdown-link>
 
-                        <x-dropdown-link href="/admin/information">
-                            Information
-                        </x-dropdown-link>
+                            <x-dropdown-link href="/admin/information">
+                                Information
+                            </x-dropdown-link>
 
-                        <x-dropdown-link href="/admin/contact">
-                            Contact
-                        </x-dropdown-link>
+                            <x-dropdown-link href="/admin/contact">
+                                Contact
+                            </x-dropdown-link>
+                        @endif
 
-                        <x-dropdown-link href="/admin/profile">
+                        @if ($isStudent)
+                            <x-dropdown-link href="{{ route('student.formulir') }}">
+                                Formulir Pendaftaran
+                            </x-dropdown-link>
+                        @endif
+
+                        @if ($isTeacher)
+                            <x-dropdown-link href="{{ route('teacher.dashboard') }}">
+                                Dashboard Guru
+                            </x-dropdown-link>
+                        @endif
+
+                        <x-dropdown-link href="{{ route('profile.edit') }}">
                             Profile
                         </x-dropdown-link>
 

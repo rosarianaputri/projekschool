@@ -1,4 +1,4 @@
-@extends('layouts.admin')
+@extends(auth()->check() && in_array(strtolower((string) auth()->user()->role), ['student', 'siswa'], true) ? 'layouts.student' : 'layouts.admin')
 
 @php
     $title = 'LaylaSchool || Profile';
@@ -6,6 +6,15 @@
 @endphp
 
 @section('content')
+    @php
+        $isStudentProfile = auth()->check() && in_array(strtolower((string) auth()->user()->role), ['student', 'siswa'], true);
+    @endphp
+
+    @if ($isStudentProfile)
+        <div class="nxl-content-right">
+            <div class="nxl-content-inner" style="padding-top: 60px; padding-left: 40px; padding-right: 40px; padding-bottom: 40px;">
+    @endif
+
     <div class="row">
         <div class="col-lg-8 col-md-10">
             <div class="card mb-4">
@@ -27,4 +36,9 @@
             </div>
         </div>
     </div>
+
+    @if ($isStudentProfile)
+            </div>
+        </div>
+    @endif
 @endsection

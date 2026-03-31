@@ -15,12 +15,28 @@ Route::middleware('guest')->group(function () {
     Route::get('register', [RegisteredUserController::class, 'create'])
         ->name('register');
 
+    Route::get('register/{role}', [RegisteredUserController::class, 'createRoleRegister'])
+        ->whereIn('role', ['guru', 'teacher', 'siswa', 'student'])
+        ->name('register.role');
+
     Route::post('register', [RegisteredUserController::class, 'store']);
+
+    Route::post('register/{role}', [RegisteredUserController::class, 'storeRoleRegister'])
+        ->whereIn('role', ['guru', 'teacher', 'siswa', 'student'])
+        ->name('register.role.store');
 
     Route::get('login', [AuthenticatedSessionController::class, 'create'])
         ->name('login');
 
+    Route::get('login/{role}', [AuthenticatedSessionController::class, 'createRoleLogin'])
+        ->whereIn('role', ['admin', 'guru', 'teacher', 'siswa', 'student'])
+        ->name('login.role');
+
     Route::post('login', [AuthenticatedSessionController::class, 'store']);
+
+    Route::post('login/{role}', [AuthenticatedSessionController::class, 'storeRoleLogin'])
+        ->whereIn('role', ['admin', 'guru', 'teacher', 'siswa', 'student'])
+        ->name('login.role.store');
 
     Route::get('forgot-password', [PasswordResetLinkController::class, 'create'])
         ->name('password.request');

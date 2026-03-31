@@ -2,6 +2,7 @@
  namespace App\Http\Middleware;
 
 use Closure;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -10,7 +11,7 @@ class CheckRole
     public function handle(Request $request, Closure $next, $role)
     {
         if (! Auth::check()) {
-            abort(403);
+            return redirect()->route('login');
         }
 
         $expectedRole = $this->normalizeRole((string) $role);
@@ -20,7 +21,10 @@ class CheckRole
             return $next($request);
         }
 
-        abort(403);
+        /** @var User $user */
+        $user = Auth::user();
+
+        return redirect()->to($user->dashboardPath());
     }
 
     private function normalizeRole(string $role): string
