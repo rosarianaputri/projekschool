@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pilih Portal Login | LaylaSchool</title>
+    <title>Pilih Portal Register | LaylaSchool</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <style>
         :root {
@@ -26,8 +26,8 @@
             padding: 24px;
         }
 
-        .login-selector {
-            width: min(920px, 100%);
+        .register-selector {
+            width: min(760px, 100%);
             background: var(--bg-soft);
             border-radius: 18px;
             box-shadow: 0 16px 42px rgba(0, 0, 0, 0.24);
@@ -42,28 +42,11 @@
             font-weight: 800;
         }
 
-        .subtitle {
-            margin: 10px 0 28px;
-            color: #36557a;
-            font-size: 0.98rem;
-        }
-
         .portal-grid {
+            margin-top: 24px;
             display: grid;
             grid-template-columns: repeat(2, minmax(0, 1fr));
             gap: 16px;
-        }
-
-        .alert {
-            margin: 14px auto 18px;
-            max-width: 620px;
-            border: 1px solid #f3c6b0;
-            background: #fff0e8;
-            color: #8f3d1e;
-            border-radius: 10px;
-            padding: 10px 14px;
-            font-size: 0.92rem;
-            font-weight: 600;
         }
 
         .portal-card {
@@ -93,6 +76,9 @@
             font-weight: 700;
         }
 
+        .student .portal-icon { color: var(--cyan); }
+        .teacher .portal-icon { color: var(--gold); }
+
         .auth-links {
             margin-top: 20px;
             font-size: 0.95rem;
@@ -109,10 +95,6 @@
             text-decoration: underline;
         }
 
-        .admin .portal-icon { color: var(--navy); }
-        .student .portal-icon { color: var(--cyan); }
-        .teacher .portal-icon { color: var(--gold); }
-
         @media (max-width: 860px) {
             .portal-grid {
                 grid-template-columns: 1fr;
@@ -121,27 +103,23 @@
     </style>
 </head>
 <body>
-    <div class="login-selector">
-        <h1>Pilih Portal Login</h1>
-
-        @if (session('error'))
-            <div class="alert">{{ session('error') }}</div>
-        @endif
+    <div class="register-selector">
+        <h1>Pilih Portal Register</h1>
 
         <div class="portal-grid">
-            <a class="portal-card student" href="{{ route('login.role', 'siswa') }}">
+            <a class="portal-card student" href="{{ route('register.role', 'siswa') }}">
                 <div class="portal-icon"><i class="fa-solid fa-user-graduate"></i></div>
-                <p class="portal-title">Portal Siswa</p>
+                <p class="portal-title">Portal Register Siswa</p>
             </a>
 
-            <a class="portal-card teacher" href="{{ route('login.role', 'guru') }}">
+            <a class="portal-card teacher" href="{{ route('register.role', 'guru') }}">
                 <div class="portal-icon"><i class="fa-solid fa-chalkboard-user"></i></div>
-                <p class="portal-title">Portal Guru</p>
+                <p class="portal-title">Portal Register Guru</p>
             </a>
         </div>
 
         <div class="auth-links">
-            <span>Belum punya akun siswa? <a href="{{ route('register') }}">Daftar di sini</a></span>
+            <span>Sudah punya akun? <a href="{{ route('login') }}">Masuk</a></span>
         </div>
     </div>
 </body>

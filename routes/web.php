@@ -2,6 +2,7 @@
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\Student\DashboardController;
+use App\Http\Controllers\Student\PpdbController as StudentPpdbController;
 use App\Http\Controllers\Student\UploadController;
 use App\Http\Controllers\Student\StatusController;
 use App\Http\Controllers\ProfileController;
@@ -146,9 +147,9 @@ Route::middleware(['auth','role:student'])->group(function () {
     Route::get('/student/status', [StatusController::class, 'index'])->name('student.status');
 
     // PPDB siswa
-    Route::get('/student/ppdb', [PpdbController::class, 'index'])->name('student.ppdb.index');
-    Route::get('/student/ppdb/formulir', [PpdbController::class, 'create'])->name('student.formulir');
-    Route::post('/student/ppdb/formulir', [PpdbController::class, 'store'])->name('student.ppdb.store');
+    Route::get('/student/ppdb', [StudentPpdbController::class, 'index'])->name('student.ppdb.index');
+    Route::get('/student/ppdb/formulir', [StudentPpdbController::class, 'create'])->name('student.formulir');
+    Route::post('/student/ppdb/formulir', [StudentPpdbController::class, 'store'])->name('student.ppdb.store');
 });
 
 require __DIR__.'/auth.php';

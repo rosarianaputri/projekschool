@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register | LaylaSchool</title>
+    <title>Register {{ $roleLabel ?? 'Siswa' }} | LaylaSchool</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <style>
         body {
@@ -99,9 +99,9 @@
 </head>
 <body>
     <div class="register-box">
-        <h1>REGISTER</h1>
+        <h1>REGISTER {{ strtoupper($roleLabel ?? 'Siswa') }}</h1>
 
-        <form method="POST" action="{{ route('register') }}">
+        <form method="POST" action="{{ $submitRoute ?? route('register') }}">
             @csrf
 
             <div class="form-group">
@@ -128,6 +128,8 @@
 
             <div class="links">
                 <span>Sudah punya akun? <a href="{{ route('login') }}">Masuk</a></span>
+                <br>
+                <span>Pilih portal register: <a href="{{ route('register') }}">Klik di sini</a></span>
             </div>
         </form>
     </div>
