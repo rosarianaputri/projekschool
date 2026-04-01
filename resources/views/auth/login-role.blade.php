@@ -160,7 +160,6 @@
         </div>
 
         <h1>Masuk {{ $roleLabel }}</h1>
-        <p class="subtitle">Gunakan akun dengan role {{ strtolower($roleLabel) }} untuk melanjutkan.</p>
 
         @if (session('error'))
             <div class="error-box">
