@@ -109,6 +109,54 @@
             </div>
 
             {{ $applications->links() }}
+
+            <hr class="my-4">
+
+            <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-3">
+                <h5 class="mb-0">Aktivitas Login Terbaru</h5>
+                <small class="text-muted">Auto refresh tiap 30 detik</small>
+            </div>
+
+            <div class="table-responsive">
+                <table class="table table-sm table-bordered align-middle">
+                    <thead>
+                        <tr>
+                            <th>Waktu Login</th>
+                            <th>Nama</th>
+                            <th>Email</th>
+                            <th>Role</th>
+                            <th>IP</th>
+                            <th>Perangkat</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @forelse ($loginActivities as $activity)
+                            <tr>
+                                <td>{{ optional($activity->logged_in_at)->format('d M Y H:i:s') ?? '-' }}</td>
+                                <td>{{ $activity->name }}</td>
+                                <td>{{ $activity->email }}</td>
+                                <td>
+                                    <span class="badge bg-secondary text-uppercase">{{ $activity->role }}</span>
+                                </td>
+                                <td>{{ $activity->ip_address ?? '-' }}</td>
+                                <td>{{ \Illuminate\Support\Str::limit((string) $activity->user_agent, 70) }}</td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="6" class="text-center text-muted">Belum ada riwayat login.</td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 @endsection
+
+@push('scripts')
+    <script>
+        setTimeout(function () {
+            window.location.reload();
+        }, 30000);
+    </script>
+@endpush

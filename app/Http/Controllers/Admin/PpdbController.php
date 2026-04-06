@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\LoginActivity;
 use App\Models\PpdbApplication;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -32,12 +33,18 @@ class PpdbController extends Controller
         }
 
         $applications = $query
-            ->latest()
+            ->latest('updated_at')
             ->paginate(20)
             ->withQueryString();
 
+        $loginActivities = LoginActivity::query()
+            ->latest('logged_in_at')
+            ->limit(20)
+            ->get();
+
         return view('admin.ppdb.index', [
             'applications' => $applications,
+            'loginActivities' => $loginActivities,
             'search' => $search,
             'status' => $status,
         ]);

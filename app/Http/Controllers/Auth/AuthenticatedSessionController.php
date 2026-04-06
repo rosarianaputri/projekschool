@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
+use App\Models\LoginActivity;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -48,6 +49,7 @@ class AuthenticatedSessionController extends Controller
 
         /** @var User $user */
         $user = Auth::user();
+        $this->recordLoginActivity($request, $user);
 
         return redirect()->intended($user->dashboardPath());
     }
@@ -80,6 +82,7 @@ class AuthenticatedSessionController extends Controller
 
         /** @var User $user */
         $user = Auth::user();
+        $this->recordLoginActivity($request, $user);
 
         return redirect()->intended($user->dashboardPath());
     }
@@ -115,5 +118,18 @@ class AuthenticatedSessionController extends Controller
             'student' => 'Siswa',
             default => ucfirst($role),
         };
+    }
+
+    private function recordLoginActivity(Request $request, User $user): void
+    {
+        LoginActivity::create([
+            'user_id' => $user->id,
+            'name' => $user->name,
+            'email' => $user->email,
+            'role' => strtolower((string) $user->role),
+            'ip_address' => $request->ip(),
+            'user_agent' => (string) $request->userAgent(),
+            'logged_in_at' => now(),
+        ]);
     }
 }
