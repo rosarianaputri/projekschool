@@ -16,13 +16,13 @@ Route::middleware('guest')->group(function () {
         ->name('register');
 
     Route::get('register/{role}', [RegisteredUserController::class, 'createRoleRegister'])
-        ->whereIn('role', ['guru', 'teacher', 'siswa', 'student'])
+        ->whereIn('role', ['siswa', 'student'])
         ->name('register.role');
 
     Route::post('register', [RegisteredUserController::class, 'store']);
 
     Route::post('register/{role}', [RegisteredUserController::class, 'storeRoleRegister'])
-        ->whereIn('role', ['guru', 'teacher', 'siswa', 'student'])
+        ->whereIn('role', ['siswa', 'student'])
         ->name('register.role.store');
 
     Route::get('login', [AuthenticatedSessionController::class, 'create'])

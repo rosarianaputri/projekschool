@@ -14,100 +14,126 @@
 
         <div class="navbar-content">
             <ul class="nxl-navbar">
-                <li class="nxl-item nxl-caption">
-                    <label>Navigation</label>
-                </li>
-                <li class="nxl-item nxl-hasmenu">
-                    <a href="{{ route('dashboard') }}" class="nxl-link">
-                        <span class="nxl-micon"><i class="feather-home"></i></span>
-                        <span class="nxl-mtext">Dashboards</span>
-                    </a>
-                </li>
-                <li class="nxl-item nxl-hasmenu">
-                    <a href="{{ route('admin.home') }}" class="nxl-link">
-                        <span class="nxl-micon"><i class="feather-globe"></i></span>
-                        <span class="nxl-mtext">Home</span>
-                    </a>
-                </li>
-                <li class="nxl-item nxl-hasmenu">
-                    <a href="{{ route('admin.about') }}" class="nxl-link">
-                        <span class="nxl-micon"><i class="feather-info"></i></span>
-                        <span class="nxl-mtext">About</span>
-                    </a>
-                </li>
-                <li class="nxl-item nxl-hasmenu">
-                    <a href="{{ route('admin.academic') }}" class="nxl-link">
-                        <span class="nxl-micon"><i class="feather-book"></i></span>
-                        <span class="nxl-mtext">Academic</span>
-                    </a>
-                </li>
-                <li class="nxl-item nxl-hasmenu">
-                    <a href="{{ route('admin.facilities') }}" class="nxl-link">
-                        <span class="nxl-micon"><i class="feather-grid"></i></span>
-                        <span class="nxl-mtext">Facilities</span>
-                    </a>
-                </li>
-                <li class="nxl-item nxl-hasmenu">
-                    <a href="{{ route('admin.student_life') }}" class="nxl-link">
-                        <span class="nxl-micon"><i class="feather-smile"></i></span>
-                        <span class="nxl-mtext">Student Life</span>
-                    </a>
-                </li>
-                <li class="nxl-item nxl-hasmenu">
-                    <a href="{{ route('admin.information') }}" class="nxl-link">
-                        <span class="nxl-micon"><i class="feather-file-text"></i></span>
-                        <span class="nxl-mtext">Information</span>
-                    </a>
-                </li>
-                <li class="nxl-item nxl-hasmenu">
-                    <a href="{{ route('admin.contact') }}" class="nxl-link">
-                        <span class="nxl-micon"><i class="feather-phone"></i></span>
-                        <span class="nxl-mtext">Contact</span>
-                    </a>
-                </li>
-                <li class="nxl-item nxl-hasmenu">
-                    <a href="{{ route('teachers.index') }}" class="nxl-link">
-                        <span class="nxl-micon"><i class="feather-users"></i></span>
-                        <span class="nxl-mtext">Teachers</span>
-                    </a>
-                </li>
-                <li class="nxl-item nxl-hasmenu">
-                    <a href="{{ route('students.index') }}" class="nxl-link">
-                        <span class="nxl-micon"><i class="feather-user"></i></span>
-                        <span class="nxl-mtext">Students</span>
-                    </a>
-                </li>
-                <li class="nxl-item nxl-hasmenu">
-                    <a href="{{ route('admin.ppdb.index') }}" class="nxl-link">
-                        <span class="nxl-micon"><i class="feather-user-plus"></i></span>
-                        <span class="nxl-mtext">PPDB</span>
-                    </a>
-                </li>
+                @php
+                    $currentRole = strtolower((string) (auth()->user()->role ?? ''));
+                @endphp
+
+                @if ($currentRole === 'admin')
+                    <li class="nxl-item nxl-caption">
+                        <label>Navigation</label>
+                    </li>
+                    <li class="nxl-item nxl-hasmenu">
+                        <a href="{{ route('dashboard') }}" class="nxl-link">
+                            <span class="nxl-micon"><i class="feather-home"></i></span>
+                            <span class="nxl-mtext">Dashboards</span>
+                        </a>
+                    </li>
+                    <li class="nxl-item nxl-hasmenu">
+                        <a href="{{ route('admin.home') }}" class="nxl-link">
+                            <span class="nxl-micon"><i class="feather-globe"></i></span>
+                            <span class="nxl-mtext">Home</span>
+                        </a>
+                    </li>
+                    <li class="nxl-item nxl-hasmenu">
+                        <a href="{{ route('admin.about') }}" class="nxl-link">
+                            <span class="nxl-micon"><i class="feather-info"></i></span>
+                            <span class="nxl-mtext">About</span>
+                        </a>
+                    </li>
+                    <li class="nxl-item nxl-hasmenu">
+                        <a href="{{ route('admin.academic') }}" class="nxl-link">
+                            <span class="nxl-micon"><i class="feather-book"></i></span>
+                            <span class="nxl-mtext">Academic</span>
+                        </a>
+                    </li>
+                    <li class="nxl-item nxl-hasmenu">
+                        <a href="{{ route('admin.facilities') }}" class="nxl-link">
+                            <span class="nxl-micon"><i class="feather-grid"></i></span>
+                            <span class="nxl-mtext">Facilities</span>
+                        </a>
+                    </li>
+                    <li class="nxl-item nxl-hasmenu">
+                        <a href="{{ route('admin.student_life') }}" class="nxl-link">
+                            <span class="nxl-micon"><i class="feather-smile"></i></span>
+                            <span class="nxl-mtext">Student Life</span>
+                        </a>
+                    </li>
+                    <li class="nxl-item nxl-hasmenu">
+                        <a href="{{ route('admin.information') }}" class="nxl-link">
+                            <span class="nxl-micon"><i class="feather-file-text"></i></span>
+                            <span class="nxl-mtext">Information</span>
+                        </a>
+                    </li>
+                    <li class="nxl-item nxl-hasmenu">
+                        <a href="{{ route('admin.contact') }}" class="nxl-link">
+                            <span class="nxl-micon"><i class="feather-phone"></i></span>
+                            <span class="nxl-mtext">Contact</span>
+                        </a>
+                    </li>
+                    <li class="nxl-item nxl-hasmenu">
+                        <a href="{{ route('teachers.index') }}" class="nxl-link">
+                            <span class="nxl-micon"><i class="feather-users"></i></span>
+                            <span class="nxl-mtext">Teachers</span>
+                        </a>
+                    </li>
+                    <li class="nxl-item nxl-hasmenu">
+                        <a href="{{ route('students.index') }}" class="nxl-link">
+                            <span class="nxl-micon"><i class="feather-user"></i></span>
+                            <span class="nxl-mtext">Students</span>
+                        </a>
+                    </li>
+                    <li class="nxl-item nxl-hasmenu">
+                        <a href="{{ route('admin.ppdb.index') }}" class="nxl-link">
+                            <span class="nxl-micon"><i class="feather-user-plus"></i></span>
+                            <span class="nxl-mtext">PPDB</span>
+                        </a>
+                    </li>
+
+                    <li class="nxl-item nxl-caption">
+                        <label>Frontend</label>
+                    </li>
+                    <li class="nxl-item nxl-hasmenu">
+                        <a href="{{ route('front.home') }}" class="nxl-link" target="_blank">
+                            <span class="nxl-micon"><i class="feather-external-link"></i></span>
+                            <span class="nxl-mtext">Preview Website</span>
+                        </a>
+                    </li>
+
+                    <li class="nxl-item nxl-caption">
+                        <label>Settings</label>
+                    </li>
+                    <li class="nxl-item nxl-hasmenu">
+                        <a href="{{ route('admin.settings.logo.edit') }}" class="nxl-link">
+                            <span class="nxl-micon"><i class="feather-image"></i></span>
+                            <span class="nxl-mtext">Logo</span>
+                        </a>
+                    </li>
+                    <li class="nxl-item nxl-hasmenu">
+                        <a href="{{ route('admin.settings.footer.edit') }}" class="nxl-link">
+                            <span class="nxl-micon"><i class="feather-layout"></i></span>
+                            <span class="nxl-mtext">Footer</span>
+                        </a>
+                    </li>
+                @else
+                    <li class="nxl-item nxl-caption">
+                        <label>Navigation</label>
+                    </li>
+                    <li class="nxl-item nxl-hasmenu">
+                        <a href="{{ route('teacher.dashboard') }}" class="nxl-link">
+                            <span class="nxl-micon"><i class="feather-home"></i></span>
+                            <span class="nxl-mtext">Dashboard Guru</span>
+                        </a>
+                    </li>
+                    <li class="nxl-item nxl-hasmenu">
+                        <a href="{{ route('teacher.ppdb.index') }}" class="nxl-link">
+                            <span class="nxl-micon"><i class="feather-user-plus"></i></span>
+                            <span class="nxl-mtext">Data Siswa PPDB</span>
+                        </a>
+                    </li>
+                @endif
 
                 <li class="nxl-item nxl-caption">
-                    <label>Frontend</label>
-                </li>
-                <li class="nxl-item nxl-hasmenu">
-                    <a href="{{ route('front.home') }}" class="nxl-link" target="_blank">
-                        <span class="nxl-micon"><i class="feather-external-link"></i></span>
-                        <span class="nxl-mtext">Preview Website</span>
-                    </a>
-                </li>
-
-                <li class="nxl-item nxl-caption">
-                    <label>Settings</label>
-                </li>
-                <li class="nxl-item nxl-hasmenu">
-                    <a href="{{ route('admin.settings.logo.edit') }}" class="nxl-link">
-                        <span class="nxl-micon"><i class="feather-image"></i></span>
-                        <span class="nxl-mtext">Logo</span>
-                    </a>
-                </li>
-                <li class="nxl-item nxl-hasmenu">
-                    <a href="{{ route('admin.settings.footer.edit') }}" class="nxl-link">
-                        <span class="nxl-micon"><i class="feather-layout"></i></span>
-                        <span class="nxl-mtext">Footer</span>
-                    </a>
+                    <label>Akun</label>
                 </li>
                 <li class="nxl-item nxl-hasmenu">
                     <a href="{{ route('profile.edit') }}" class="nxl-link">

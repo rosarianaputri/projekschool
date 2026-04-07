@@ -18,6 +18,16 @@
             <div class="col-lg-8">
                 <div class="card border-0">
                     <div class="card-body">
+                        @if (!$application)
+                            <div class="alert alert-warning" role="alert">
+                                <i class="feather-alert-circle me-2"></i>
+                                Anda belum mengisi formulir PPDB. Isi formulir terlebih dahulu agar berkas dapat disimpan ke data pendaftaran Anda.
+                                <div class="mt-2">
+                                    <a href="{{ route('student.formulir') }}" class="btn btn-sm btn-primary">Isi Formulir Sekarang</a>
+                                </div>
+                            </div>
+                        @endif
+
                         {{-- Display success message --}}
                         @if (session('success'))
                             <div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -36,8 +46,42 @@
                             </div>
                         @endif
 
+                        @if (session('document_status') === 'complete')
+                            <div class="alert alert-success" role="alert">
+                                <i class="feather-check-circle me-2"></i>
+                                Semua dokumen wajib sudah lengkap.
+                            </div>
+                        @elseif ($documentSummary && !$documentSummary['is_complete'])
+                            <div class="alert alert-warning" role="alert">
+                                <i class="feather-info me-2"></i>
+                                Dokumen belum lengkap. Anda baru upload {{ $documentSummary['uploaded_required'] }}/{{ $documentSummary['required_total'] }} dokumen wajib.
+                            </div>
+                        @endif
+
                         <form action="{{ route('student.upload.store') }}" method="POST" enctype="multipart/form-data">
                             @csrf
+
+                            <div class="mb-4">
+                                <label for="document_type" class="form-label fw-600 text-dark">Jenis Dokumen</label>
+                                <select class="form-select @error('document_type') is-invalid @enderror" id="document_type" name="document_type" {{ !$application ? 'disabled' : '' }} required>
+                                    <option value="">Pilih dokumen yang ingin diupload</option>
+                                    @foreach ($requiredDocuments as $type => $label)
+                                        <option value="{{ $type }}" {{ old('document_type') === $type ? 'selected' : '' }}>
+                                            {{ $label }} (Wajib)
+                                        </option>
+                                    @endforeach
+                                    @foreach ($optionalDocuments as $type => $label)
+                                        <option value="{{ $type }}" {{ old('document_type') === $type ? 'selected' : '' }}>
+                                            {{ $label }} (Opsional)
+                                        </option>
+                                    @endforeach
+                                </select>
+                                @error('document_type')
+                                    <div class="invalid-feedback d-block mt-2">
+                                        <i class="feather-alert-triangle me-1"></i>{{ $message }}
+                                    </div>
+                                @enderror
+                            </div>
 
                             <div class="mb-4">
                                 <label for="file" class="form-label fw-600 text-dark">Pilih File</label>
@@ -46,7 +90,7 @@
                                     <h6 class="text-dark mb-2">Drag & drop file di sini atau klik untuk memilih</h6>
                                     <p class="text-muted small mb-0">Format: PDF, DOC, DOCX, JPG, PNG | Maksimal 5MB</p>
                                     <input class="form-control d-none" type="file" id="file" name="file" 
-                                           accept=".pdf,.doc,.docx,.jpg,.jpeg,.png" required>
+                                           accept=".pdf,.doc,.docx,.jpg,.jpeg,.png" {{ !$application ? 'disabled' : '' }} required>
                                 </div>
                                 
                                 <div id="file-info" class="mt-3" style="display: none;">
@@ -66,7 +110,7 @@
                             <hr>
 
                             <div class="d-flex gap-2">
-                                <button type="submit" class="btn btn-primary">
+                                <button type="submit" class="btn btn-primary" {{ !$application ? 'disabled' : '' }}>
                                     <i class="feather-upload me-2"></i>Upload Berkas
                                 </button>
                                 <a href="{{ route('student.dashboard') }}" class="btn btn-secondary">
@@ -86,26 +130,30 @@
                     </div>
                     <div class="card-body">
                         <ul class="list-unstyled">
-                            <li class="mb-2">
-                                <i class="feather-check text-success me-2"></i>
-                                <span class="text-muted">Fotokopi akta kelahiran (PDF/JPG)</span>
-                            </li>
-                            <li class="mb-2">
-                                <i class="feather-check text-success me-2"></i>
-                                <span class="text-muted">Fotokopi KTP orang tua (PDF/JPG)</span>
-                            </li>
-                            <li class="mb-2">
-                                <i class="feather-check text-success me-2"></i>
-                                <span class="text-muted">Raport 2 tahun terakhir (PDF)</span>
-                            </li>
-                            <li class="mb-2">
-                                <i class="feather-check text-success me-2"></i>
-                                <span class="text-muted">Sertifikat prestasi (PDF/JPG) - jika ada</span>
-                            </li>
-                            <li>
-                                <i class="feather-check text-success me-2"></i>
-                                <span class="text-muted">Surat keterangan sehat (PDF)</span>
-                            </li>
+                            @foreach ($requiredDocuments as $type => $label)
+                                <li class="mb-2 d-flex align-items-center justify-content-between gap-2">
+                                    <span class="text-muted">
+                                        <i class="feather-file-text me-2"></i>{{ $label }} (Wajib)
+                                    </span>
+                                    @if (in_array($type, $uploadedTypes, true))
+                                        <span class="badge bg-success">Sudah diupload</span>
+                                    @else
+                                        <span class="badge bg-warning text-dark">Belum upload</span>
+                                    @endif
+                                </li>
+                            @endforeach
+                            @foreach ($optionalDocuments as $type => $label)
+                                <li class="mb-2 d-flex align-items-center justify-content-between gap-2">
+                                    <span class="text-muted">
+                                        <i class="feather-file-text me-2"></i>{{ $label }} (Opsional)
+                                    </span>
+                                    @if (in_array($type, $uploadedTypes, true))
+                                        <span class="badge bg-success">Sudah diupload</span>
+                                    @else
+                                        <span class="badge bg-secondary">Opsional</span>
+                                    @endif
+                                </li>
+                            @endforeach
                         </ul>
                     </div>
                 </div>

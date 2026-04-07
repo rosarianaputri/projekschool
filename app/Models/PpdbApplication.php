@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class PpdbApplication extends Model
 {
@@ -38,5 +39,29 @@ class PpdbApplication extends Model
     public function approver(): BelongsTo
     {
         return $this->belongsTo(User::class, 'approved_by');
+    }
+
+    public function documents(): HasMany
+    {
+        return $this->hasMany(PpdbApplicationDocument::class, 'ppdb_application_id');
+    }
+
+    public function documentSummary(): array
+    {
+        $requiredTypes = array_keys(PpdbApplicationDocument::REQUIRED_DOCUMENTS);
+        $uploadedTypes = $this->documents
+            ->pluck('document_type')
+            ->unique()
+            ->values()
+            ->all();
+
+        $missingTypes = array_values(array_diff($requiredTypes, $uploadedTypes));
+
+        return [
+            'required_total' => count($requiredTypes),
+            'uploaded_required' => count($requiredTypes) - count($missingTypes),
+            'missing_types' => $missingTypes,
+            'is_complete' => count($missingTypes) === 0,
+        ];
     }
 }

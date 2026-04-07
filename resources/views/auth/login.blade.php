@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pilih Portal Login | LaylaSchool</title>
+    <title>Masuk Akun | LaylaSchool</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <style>
         :root {
@@ -50,7 +50,7 @@
 
         .portal-grid {
             display: grid;
-            grid-template-columns: repeat(2, minmax(0, 1fr));
+            grid-template-columns: 1fr;
             gap: 16px;
         }
 
@@ -122,7 +122,7 @@
 </head>
 <body>
     <div class="login-selector">
-        <h1>Pilih Portal Login</h1>
+        <h1>Masuk Akun</h1>
 
         @if (session('error'))
             <div class="alert">{{ session('error') }}</div>
@@ -131,17 +131,12 @@
         <div class="portal-grid">
             <a class="portal-card student" href="{{ route('login.role', 'siswa') }}">
                 <div class="portal-icon"><i class="fa-solid fa-user-graduate"></i></div>
-                <p class="portal-title">Portal Siswa</p>
-            </a>
-
-            <a class="portal-card teacher" href="{{ route('login.role', 'guru') }}">
-                <div class="portal-icon"><i class="fa-solid fa-chalkboard-user"></i></div>
-                <p class="portal-title">Portal Guru</p>
+                <p class="portal-title">Masuk Sebagai Siswa</p>
             </a>
         </div>
 
         <div class="auth-links">
-            <span>Belum punya akun siswa? <a href="{{ route('register') }}">Daftar di sini</a></span>
+            <span>Belum punya akun? <a href="{{ route('register') }}">Daftar di sini</a></span>
         </div>
     </div>
 </body>

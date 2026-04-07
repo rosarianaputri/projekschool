@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\LoginActivity;
 use App\Models\PpdbApplication;
+use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -33,20 +34,49 @@ class PpdbController extends Controller
         }
 
         $applications = $query
+            ->with('documents')
             ->latest('updated_at')
             ->paginate(20)
             ->withQueryString();
+
+        $documentCompletionStats = [
+            'complete' => 0,
+            'incomplete' => 0,
+            'total' => $applications->count(),
+        ];
+
+        $applications->getCollection()->transform(function (PpdbApplication $application) use (&$documentCompletionStats) {
+            $summary = $application->documentSummary();
+            $application->setAttribute('document_summary', $summary);
+
+            if ($summary['is_complete']) {
+                $documentCompletionStats['complete']++;
+            } else {
+                $documentCompletionStats['incomplete']++;
+            }
+
+            return $application;
+        });
 
         $loginActivities = LoginActivity::query()
             ->latest('logged_in_at')
             ->limit(20)
             ->get();
 
+        $userRoleStats = [
+            'admin' => User::query()->whereRaw('LOWER(role) = ?', ['admin'])->count(),
+            'teacher' => User::query()->whereRaw('LOWER(role) IN (?, ?)', ['teacher', 'guru'])->count(),
+            'student' => User::query()->whereRaw('LOWER(role) IN (?, ?)', ['student', 'siswa'])->count(),
+            'total' => User::query()->count(),
+        ];
+
         return view('admin.ppdb.index', [
             'applications' => $applications,
             'loginActivities' => $loginActivities,
             'search' => $search,
             'status' => $status,
+            'documentCompletionStats' => $documentCompletionStats,
+            'userRoleStats' => $userRoleStats,
         ]);
     }
 

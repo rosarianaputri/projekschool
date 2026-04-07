@@ -137,7 +137,7 @@
             margin-top: 16px;
             font-size: 0.9rem;
             display: flex;
-            justify-content: space-between;
+            justify-content: flex-end;
             gap: 12px;
         }
 
@@ -156,7 +156,7 @@
     <div class="login-box role-{{ $role }}">
         <div class="role-chip">
             <i class="fa-solid fa-id-badge"></i>
-            Portal {{ $roleLabel }}
+            Akun {{ $roleLabel }}
         </div>
 
         <h1>Masuk {{ $roleLabel }}</h1>
@@ -191,10 +191,9 @@
                 Ingat saya
             </label>
 
-            <button class="login-btn" type="submit">Masuk ke Portal {{ $roleLabel }}</button>
+            <button class="login-btn" type="submit">Masuk {{ $roleLabel }}</button>
 
             <div class="links">
-                <a href="{{ route('login') }}">Pilih portal lain</a>
                 @if (Route::has('password.request'))
                     <a href="{{ route('password.request') }}">Lupa password?</a>
                 @endif
