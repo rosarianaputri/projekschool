@@ -12,6 +12,8 @@ use App\Http\Controllers\Admin\PpdbController as AdminPpdbController;
 use App\Http\Controllers\Admin\SiteSettingController;
 use App\Http\Controllers\Admin\TeacherController;
 use App\Http\Controllers\Admin\StudentController;   
+use App\Http\Controllers\Teacher\DashboardController as TeacherDashboardController;
+use App\Http\Controllers\Teacher\PpdbController as TeacherPpdbController;
 use App\Http\Controllers\frontend\PpdbController;
 use App\Models\User;
 use Illuminate\Support\Facades\Artisan;
@@ -128,7 +130,9 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::middleware(['auth', 'role:teacher'])->prefix('teacher')->name('teacher.')->group(function () {
-    Route::view('/dashboard', 'teacher.dashboard')->name('dashboard');
+    Route::get('/dashboard', [TeacherDashboardController::class, 'index'])->name('dashboard');
+    Route::get('/ppdb', [TeacherPpdbController::class, 'index'])->name('ppdb.index');
+    Route::get('/ppdb/{ppdbApplication}', [TeacherPpdbController::class, 'show'])->name('ppdb.show');
 });
 
 // ===========================
