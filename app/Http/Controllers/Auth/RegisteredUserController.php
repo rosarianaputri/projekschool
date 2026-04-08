@@ -29,7 +29,7 @@ class RegisteredUserController extends Controller
     {
         $normalizedRole = $this->normalizeRole($role);
 
-        if (! in_array($normalizedRole, ['teacher', 'student'], true)) {
+        if (! in_array($normalizedRole, ['student'], true)) {
             abort(404);
         }
 
@@ -57,7 +57,7 @@ class RegisteredUserController extends Controller
     {
         $normalizedRole = $this->normalizeRole($role);
 
-        if (! in_array($normalizedRole, ['teacher', 'student'], true)) {
+        if (! in_array($normalizedRole, ['student'], true)) {
             abort(404);
         }
 

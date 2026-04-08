@@ -15,7 +15,7 @@
                 <div class="d-flex flex-column flex-lg-row align-items-start align-items-lg-center justify-content-between gap-3">
                     <div>
                         <h3 class="mb-2">Halo, {{ auth()->user()->name ?? 'Guru' }} 👋</h3>
-                        <p class="text-muted mb-2">Cockpit pengajaran Anda: overview multi-kelas, absensi, nilai, materi, dan tugas — semuanya dalam satu halaman.</p>
+                        <p class="text-muted mb-2">Cockpit pengajaran Anda: overview multi-kelas, absensi, nilai, materi, dan tugas - semuanya dalam satu halaman.</p>
                         <div class="d-flex flex-wrap gap-2">
                             <a href="{{ route('teacher.classes.index') }}" class="btn btn-primary btn-sm">Kelola Kelas</a>
                             <a href="{{ route('teacher.attendance.index') }}" class="btn btn-outline-primary btn-sm">Buka Absensi</a>
