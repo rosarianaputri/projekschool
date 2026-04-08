@@ -1,17 +1,26 @@
 <?php
 use Illuminate\Support\Facades\Route;
 
-use App\Http\Controllers\Student\DashboardController;
+use App\Http\Controllers\Student\DashboardController as StudentDashboardController;
 use App\Http\Controllers\Student\PpdbController as StudentPpdbController;
 use App\Http\Controllers\Student\UploadController;
 use App\Http\Controllers\Student\StatusController;
+use App\Http\Controllers\Teacher\AssignmentController;
+use App\Http\Controllers\Teacher\AttendanceController;
+use App\Http\Controllers\Teacher\ClassController;
+use App\Http\Controllers\Teacher\DashboardController as TeacherDashboardController;
+use App\Http\Controllers\Teacher\GradeController;
+use App\Http\Controllers\Teacher\MaterialController;
+use App\Http\Controllers\Teacher\ReportController;
+use App\Http\Controllers\Teacher\ScheduleController;
+use App\Http\Controllers\Teacher\StudentController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\FrontendController;
 use App\Http\Controllers\Admin\SitePageController;
 use App\Http\Controllers\Admin\PpdbController as AdminPpdbController;
 use App\Http\Controllers\Admin\SiteSettingController;
 use App\Http\Controllers\Admin\TeacherController;
-use App\Http\Controllers\Admin\StudentController;   
+use App\Http\Controllers\Admin\StudentController as AdminStudentController;
 use App\Http\Controllers\frontend\PpdbController;
 use App\Models\User;
 use Illuminate\Support\Facades\Artisan;
@@ -118,7 +127,7 @@ Route::middleware(['auth', 'verified', 'role:admin'])->prefix('admin')->name('ad
 
 Route::prefix('admin')->middleware(['auth', 'role:admin'])->group(function () {
     Route::resource('teachers', TeacherController::class);
-    Route::resource('students', StudentController::class);
+    Route::resource('students', AdminStudentController::class);
 });
 
 Route::middleware('auth')->group(function () {
@@ -128,7 +137,16 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::middleware(['auth', 'role:teacher'])->prefix('teacher')->name('teacher.')->group(function () {
-    Route::view('/dashboard', 'teacher.dashboard')->name('dashboard');
+    Route::get('/dashboard', [TeacherDashboardController::class, 'index'])->name('dashboard');
+
+    Route::resource('classes', ClassController::class)->parameters(['classes' => 'teacher_class'])->except(['show']);
+    Route::resource('students', StudentController::class)->except(['show']);
+    Route::resource('attendance', AttendanceController::class)->parameters(['attendance' => 'teacher_attendance'])->except(['show']);
+    Route::resource('grades', GradeController::class)->parameters(['grades' => 'teacher_grade'])->except(['show']);
+    Route::resource('assignments', AssignmentController::class)->parameters(['assignments' => 'teacher_assignment'])->except(['show']);
+    Route::resource('materials', MaterialController::class)->parameters(['materials' => 'teacher_material'])->except(['show']);
+    Route::resource('schedule', ScheduleController::class)->parameters(['schedule' => 'teacher_schedule'])->except(['show']);
+    Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');
 });
 
 // ===========================
@@ -137,7 +155,7 @@ Route::middleware(['auth', 'role:teacher'])->prefix('teacher')->name('teacher.')
 
 Route::middleware(['auth','role:student'])->group(function () {
     // Dashboard siswa
-    Route::get('/student/dashboard', [DashboardController::class, 'index'])->name('student.dashboard');
+    Route::get('/student/dashboard', [StudentDashboardController::class, 'index'])->name('student.dashboard');
 
     // Upload berkas
     Route::get('/student/upload', [UploadController::class, 'index'])->name('student.upload');

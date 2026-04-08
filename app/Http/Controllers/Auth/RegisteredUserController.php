@@ -85,22 +85,4 @@ class RegisteredUserController extends Controller
 
         return redirect($user->dashboardPath());
     }
-
-    private function normalizeRole(string $role): string
-    {
-        return match (strtolower($role)) {
-            'guru' => 'teacher',
-            'siswa' => 'student',
-            default => strtolower($role),
-        };
-    }
-
-    private function roleLabel(string $role): string
-    {
-        return match ($role) {
-            'teacher' => 'Guru',
-            'student' => 'Siswa',
-            default => ucfirst($role),
-        };
-    }
 }

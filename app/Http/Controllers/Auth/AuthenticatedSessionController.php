@@ -97,23 +97,4 @@ class AuthenticatedSessionController extends Controller
 
         return redirect('/');
     }
-
-    private function normalizeRole(string $role): string
-    {
-        return match (strtolower($role)) {
-            'guru' => 'teacher',
-            'siswa' => 'student',
-            default => strtolower($role),
-        };
-    }
-
-    private function roleLabel(string $role): string
-    {
-        return match ($role) {
-            'admin' => 'Admin',
-            'teacher' => 'Guru',
-            'student' => 'Siswa',
-            default => ucfirst($role),
-        };
-    }
 }
