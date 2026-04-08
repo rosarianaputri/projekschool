@@ -3,80 +3,42 @@
 namespace App\Http\Controllers\Teacher;
 
 use App\Http\Controllers\Controller;
-use App\Models\LoginActivity;
-use App\Models\PpdbApplication;
-use App\Models\User;
+use App\Models\TeacherAssignment;
+use App\Models\TeacherAttendance;
+use App\Models\TeacherClass;
+use App\Models\TeacherGrade;
+use App\Models\TeacherMaterial;
+use App\Models\TeacherSchedule;
+use App\Models\TeacherStudent;
 use Illuminate\Http\Request;
-use Illuminate\View\View;
 
 class DashboardController extends Controller
 {
-    public function index(Request $request): View
+    public function index(Request $request)
     {
-        $query = PpdbApplication::query();
-
-        $search = trim((string) $request->query('search', ''));
-        $status = (string) $request->query('status', '');
-
-        if ($search !== '') {
-            $query->where(function ($builder) use ($search) {
-                $builder->where('registration_code', 'like', "%{$search}%")
-                    ->orWhere('student_name', 'like', "%{$search}%")
-                    ->orWhere('parent_name', 'like', "%{$search}%")
-                    ->orWhere('phone', 'like', "%{$search}%");
-            });
-        }
-
-        if (in_array($status, ['pending', 'approved', 'rejected'], true)) {
-            $query->where('status', $status);
-        }
-
-        $applications = $query
-            ->with('documents')
-            ->latest('updated_at')
-            ->paginate(20)
-            ->withQueryString();
-
-        $documentCompletionStats = [
-            'complete' => 0,
-            'incomplete' => 0,
-            'total' => $applications->count(),
+        $stats = [
+            'classes' => TeacherClass::count(),
+            'students' => TeacherStudent::count(),
+            'subjects' => TeacherClass::distinct('subject')->count('subject'),
+            'pending_tasks' => TeacherAssignment::where('status', 'draft')->count(),
+            'attendance_alerts' => TeacherAttendance::whereDate('date', now())->count(),
         ];
 
-        $applications->getCollection()->transform(function (PpdbApplication $application) use (&$documentCompletionStats) {
-            $summary = $application->documentSummary();
-            $application->setAttribute('document_summary', $summary);
-
-            if ($summary['is_complete']) {
-                $documentCompletionStats['complete']++;
-            } else {
-                $documentCompletionStats['incomplete']++;
-            }
-
-            return $application;
+        $classes = TeacherClass::orderBy('name')->limit(4)->get();
+        $todaySchedule = TeacherSchedule::orderBy('day')->orderBy('start_time')->limit(3)->get()->map(function ($schedule) {
+            return [
+                'time' => $schedule->start_time,
+                'title' => ($schedule->class->name ?? '-') . ' - ' . ($schedule->class->subject ?? '-'),
+                'location' => $schedule->room ?: 'Ruang belum diisi',
+            ];
         });
 
-        $studentLoginActivities = LoginActivity::query()
-            ->whereIn('role', ['student', 'siswa'])
-            ->latest('logged_in_at')
-            ->limit(20)
-            ->get();
-
-        $studentStats = [
-            'student_accounts' => User::query()->whereRaw('LOWER(role) IN (?, ?)', ['student', 'siswa'])->count(),
-            'ppdb_total' => PpdbApplication::query()->count(),
-            'ppdb_pending' => PpdbApplication::query()->where('status', 'pending')->count(),
-            'ppdb_approved' => PpdbApplication::query()->where('status', 'approved')->count(),
-            'ppdb_rejected' => PpdbApplication::query()->where('status', 'rejected')->count(),
+        $alerts = [
+            sprintf('%s tugas belum dinilai', TeacherAssignment::where('status', 'draft')->count()),
+            sprintf('%s catatan absensi untuk hari ini', TeacherAttendance::whereDate('date', now())->count()),
+            sprintf('%s siswa memiliki catatan khusus', TeacherStudent::whereNotNull('notes')->count()),
         ];
 
-        return view('teacher.dashboard', [
-            'applications' => $applications,
-            'search' => $search,
-            'status' => $status,
-            'documentCompletionStats' => $documentCompletionStats,
-            'studentLoginActivities' => $studentLoginActivities,
-            'studentStats' => $studentStats,
-        ]);
+        return view('teacher.dashboard', compact('stats', 'classes', 'todaySchedule', 'alerts'));
     }
 }
