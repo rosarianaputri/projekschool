@@ -50,6 +50,16 @@ $pageTitle = 'Tambah Guru';
                     <input type="email" name="email" class="form-control" placeholder="email@gmail.com">
                 </div>
 
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Akun Pengguna</label>
+                    <select name="user_id" class="form-select">
+                        <option value="">Pilih akun (opsional)</option>
+                        @foreach($users as $user)
+                            <option value="{{ $user->id }}">{{ $user->name }} ({{ $user->email }})</option>
+                        @endforeach
+                    </select>
+                </div>
+
             </div>
 
             <div class="mt-3">

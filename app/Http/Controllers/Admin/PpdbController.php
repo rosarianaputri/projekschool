@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\PpdbApplication;
+use App\Models\TeacherClass;
+use App\Models\TeacherStudent;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -65,9 +67,47 @@ class PpdbController extends Controller
 
     public function show(PpdbApplication $ppdbApplication): View
     {
+        $classes = TeacherClass::with('teacher')
+            ->orderBy('name')
+            ->get();
+
         return view('admin.ppdb.show', [
             'application' => $ppdbApplication,
+            'classes' => $classes,
         ]);
+    }
+
+    public function assign(Request $request, PpdbApplication $ppdbApplication): RedirectResponse
+    {
+        $data = $request->validate([
+            'teacher_class_id' => ['required', 'exists:teacher_classes,id'],
+        ]);
+
+        $teacherClass = TeacherClass::findOrFail($data['teacher_class_id']);
+
+        TeacherStudent::firstOrCreate(
+            [
+                'teacher_class_id' => $teacherClass->id,
+                'name' => $ppdbApplication->student_name,
+                'phone' => $ppdbApplication->phone,
+                'email' => $ppdbApplication->email,
+            ],
+            [
+                'teacher_id' => $teacherClass->teacher_id,
+                'nis' => null,
+                'notes' => "Dari PPDB: {$ppdbApplication->registration_code}",
+            ]
+        );
+
+        if ($ppdbApplication->status !== 'approved') {
+            $ppdbApplication->update([
+                'status' => 'approved',
+                'approved_at' => now(),
+                'approved_by' => Auth::id(),
+            ]);
+        }
+
+        return back()->with('status', 'ppdb_assigned');
     }
 
     public function edit(PpdbApplication $ppdbApplication): View

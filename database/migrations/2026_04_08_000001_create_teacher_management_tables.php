@@ -11,6 +11,7 @@ return new class extends Migration
         Schema::create('teacher_classes', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('teacher_id')->nullable();
+            $table->foreign('teacher_id')->references('id')->on('teachers')->onDelete('cascade');
             $table->string('name');
             $table->string('subject');
             $table->string('semester')->nullable();
@@ -22,7 +23,9 @@ return new class extends Migration
         Schema::create('teacher_students', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('teacher_id')->nullable();
+            $table->foreign('teacher_id')->references('id')->on('teachers')->onDelete('cascade');
             $table->unsignedBigInteger('teacher_class_id')->nullable();
+            $table->foreign('teacher_class_id')->references('id')->on('teacher_classes')->onDelete('cascade');
             $table->string('name');
             $table->string('nis')->nullable();
             $table->string('phone')->nullable();
@@ -34,6 +37,7 @@ return new class extends Migration
         Schema::create('teacher_assignments', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('teacher_class_id')->nullable();
+            $table->foreign('teacher_class_id')->references('id')->on('teacher_classes')->onDelete('cascade');
             $table->string('title');
             $table->text('description')->nullable();
             $table->date('due_date')->nullable();
@@ -44,6 +48,7 @@ return new class extends Migration
         Schema::create('teacher_materials', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('teacher_class_id')->nullable();
+            $table->foreign('teacher_class_id')->references('id')->on('teacher_classes')->onDelete('cascade');
             $table->string('title');
             $table->string('type')->nullable();
             $table->string('link')->nullable();
@@ -54,6 +59,7 @@ return new class extends Migration
         Schema::create('teacher_schedules', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('teacher_class_id')->nullable();
+            $table->foreign('teacher_class_id')->references('id')->on('teacher_classes')->onDelete('cascade');
             $table->string('day')->nullable();
             $table->time('start_time')->nullable();
             $table->time('end_time')->nullable();
@@ -64,6 +70,7 @@ return new class extends Migration
         Schema::create('teacher_attendances', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('teacher_class_id')->nullable();
+            $table->foreign('teacher_class_id')->references('id')->on('teacher_classes')->onDelete('cascade');
             $table->date('date');
             $table->unsignedInteger('present')->default(0);
             $table->unsignedInteger('permission')->default(0);
@@ -76,6 +83,7 @@ return new class extends Migration
         Schema::create('teacher_grades', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('teacher_class_id')->nullable();
+            $table->foreign('teacher_class_id')->references('id')->on('teacher_classes')->onDelete('cascade');
             $table->string('student_name');
             $table->string('category')->nullable();
             $table->unsignedInteger('score')->nullable();

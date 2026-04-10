@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use App\Models\User;
 
 class Student extends Model
 {
@@ -12,6 +14,7 @@ class Student extends Model
     protected $table = 'ppdb_applications';
 
     protected $fillable = [
+        'user_id',
         'student_name',
         'gender',
         'birth_place',
@@ -23,4 +26,9 @@ class Student extends Model
         'address',
         'status',
     ];
+
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
 }

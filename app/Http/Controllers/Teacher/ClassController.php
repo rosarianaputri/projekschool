@@ -2,16 +2,15 @@
 
 namespace App\Http\Controllers\Teacher;
 
-use App\Http\Controllers\Controller;
 use App\Models\TeacherClass;
 use Illuminate\Http\Request;
 
-class ClassController extends Controller
+class ClassController extends TeacherBaseController
 {
     public function index()
     {
-        $teacherId = auth()->id();
-        $classes = TeacherClass::where('teacher_id', $teacherId)->orderBy('name')->get();
+        $teacherId = $this->currentTeacherId();
+        $classes = TeacherClass::where('teacher_id', $teacherId)->orderBy('name')->paginate(10);
 
         return view('teacher.classes.index', compact('classes'));
     }
@@ -23,6 +22,8 @@ class ClassController extends Controller
 
     public function store(Request $request)
     {
+        $teacherId = $this->currentTeacherId();
+
         $data = $request->validate([
             'name' => 'required|string|max:255',
             'subject' => 'required|string|max:255',
@@ -31,7 +32,7 @@ class ClassController extends Controller
             'room' => 'nullable|string|max:100',
         ]);
 
-        $data['teacher_id'] = auth()->id();
+        $data['teacher_id'] = $teacherId;
         TeacherClass::create($data);
 
         return redirect()->route('teacher.classes.index')->with('success', 'Kelas berhasil ditambahkan.');
@@ -39,14 +40,14 @@ class ClassController extends Controller
 
     public function edit(TeacherClass $teacher_class)
     {
-        abort_unless($teacher_class->teacher_id === auth()->id(), 403);
+        abort_unless($teacher_class->teacher_id === $this->currentTeacherId(), 403);
 
         return view('teacher.classes.form', ['teacher_class' => $teacher_class]);
     }
 
     public function update(Request $request, TeacherClass $teacher_class)
     {
-        abort_unless($teacher_class->teacher_id === auth()->id(), 403);
+        abort_unless($teacher_class->teacher_id === $this->currentTeacherId(), 403);
 
         $data = $request->validate([
             'name' => 'required|string|max:255',
@@ -63,7 +64,7 @@ class ClassController extends Controller
 
     public function destroy(TeacherClass $teacher_class)
     {
-        abort_unless($teacher_class->teacher_id === auth()->id(), 403);
+        abort_unless($teacher_class->teacher_id === $this->currentTeacherId(), 403);
 
         $teacher_class->delete();
 

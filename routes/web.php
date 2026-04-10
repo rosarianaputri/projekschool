@@ -114,6 +114,7 @@ Route::middleware(['auth', 'verified', 'role:admin'])->prefix('admin')->name('ad
     Route::get('/ppdb/create', [AdminPpdbController::class, 'create'])->name('ppdb.create');
     Route::post('/ppdb', [AdminPpdbController::class, 'store'])->name('ppdb.store');
     Route::get('/ppdb/{ppdbApplication}', [AdminPpdbController::class, 'show'])->name('ppdb.show');
+    Route::patch('/ppdb/{ppdbApplication}/assign', [AdminPpdbController::class, 'assign'])->name('ppdb.assign');
     Route::get('/ppdb/{ppdbApplication}/edit', [AdminPpdbController::class, 'edit'])->name('ppdb.edit');
     Route::put('/ppdb/{ppdbApplication}', [AdminPpdbController::class, 'update'])->name('ppdb.update');
     Route::patch('/ppdb/{ppdbApplication}/acc', [AdminPpdbController::class, 'approve'])->name('ppdb.acc');
@@ -141,7 +142,10 @@ Route::middleware(['auth', 'role:teacher'])->prefix('teacher')->name('teacher.')
 
     Route::resource('classes', ClassController::class)->parameters(['classes' => 'teacher_class'])->except(['show']);
     Route::resource('students', StudentController::class)->except(['show']);
+    Route::get('/classes/{teacher_class}/students', [StudentController::class, 'showClass'])->name('students.class');
     Route::resource('attendance', AttendanceController::class)->parameters(['attendance' => 'teacher_attendance'])->except(['show']);
+    Route::get('/classes/{teacher_class}/attendance', [AttendanceController::class, 'byClass'])->name('attendance.by-class');
+    Route::post('/classes/{teacher_class}/attendance', [AttendanceController::class, 'storeByClass'])->name('attendance.store-by-class');
     Route::resource('grades', GradeController::class)->parameters(['grades' => 'teacher_grade'])->except(['show']);
     Route::resource('assignments', AssignmentController::class)->parameters(['assignments' => 'teacher_assignment'])->except(['show']);
     Route::resource('materials', MaterialController::class)->parameters(['materials' => 'teacher_material'])->except(['show']);
