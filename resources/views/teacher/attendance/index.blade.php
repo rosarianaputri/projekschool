@@ -41,17 +41,28 @@
                                 <td>{{ $attendance->sick }}</td>
                                 <td>{{ $attendance->absent }}</td>
                                 <td>
-                                    <a href="{{ route('teacher.attendance.edit', $attendance) }}" class="btn btn-sm btn-outline-primary">Edit</a>
-                                    <form action="{{ route('teacher.attendance.destroy', $attendance) }}" method="POST" class="d-inline">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-sm btn-outline-danger" onclick="return confirm('Hapus data absensi?')">Hapus</button>
-                                    </form>
+                                    <div class="d-flex gap-2 align-items-center">
+                                        <a href="{{ route('teacher.attendance.edit', $attendance) }}" class="btn btn-sm btn-outline-primary d-flex align-items-center justify-content-center" style="width:38px; height:38px; padding:0;" title="Edit absensi">
+                                            <i class="feather-edit-2"></i>
+                                            <span class="visually-hidden">Edit</span>
+                                        </a>
+                                        <form action="{{ route('teacher.attendance.destroy', $attendance) }}" method="POST" class="d-inline">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-sm btn-outline-danger d-flex align-items-center justify-content-center" style="width:38px; height:38px; padding:0;" title="Hapus absensi" onclick="return confirm('Hapus data absensi?')">
+                                                <i class="feather-trash-2"></i>
+                                                <span class="visually-hidden">Hapus</span>
+                                            </button>
+                                        </form>
+                                    </div>
                                 </td>
                             </tr>
                         @endforeach
                     </tbody>
                 </table>
+                <div class="d-flex justify-content-center mt-3">
+                    {{ $attendances->links() }}
+                </div>
             </div>
         @endif
     </div>

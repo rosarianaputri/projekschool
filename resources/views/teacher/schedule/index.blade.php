@@ -48,6 +48,9 @@
                         @endforeach
                     </tbody>
                 </table>
+                <div class="d-flex justify-content-center mt-3">
+                    {{ $schedules->links() }}
+                </div>
             </div>
         @endif
     </div>

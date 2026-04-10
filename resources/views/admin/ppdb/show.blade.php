@@ -12,6 +12,8 @@
                 <div class="alert alert-success">Data pendaftar berhasil diperbarui.</div>
             @elseif (session('status') === 'ppdb_approved')
                 <div class="alert alert-success">Pendaftar berhasil di-ACC.</div>
+            @elseif (session('status') === 'ppdb_assigned')
+                <div class="alert alert-success">Pendaftar berhasil disambungkan ke kelas.</div>
             @elseif (session('status') === 'ppdb_rejected')
                 <div class="alert alert-warning">Pendaftar berhasil ditolak.</div>
             @endif
@@ -22,6 +24,34 @@
                     <a href="{{ route('admin.ppdb.edit', $application) }}" class="btn btn-info btn-sm text-white">Edit</a>
                     <a href="{{ route('admin.ppdb.index') }}" class="btn btn-outline-secondary btn-sm">Kembali</a>
                 </div>
+            </div>
+
+            <div class="mb-4 p-3 rounded bg-light border">
+                <h6 class="mb-2">Sambungkan ke Kelas</h6>
+                @if($classes->isEmpty())
+                    <div class="text-muted">
+                        Belum ada kelas tersedia. Buat kelas dulu melalui halaman kelas guru agar siswa ini dapat ditempatkan.
+                    </div>
+                @else
+                    <form method="POST" action="{{ route('admin.ppdb.assign', $application) }}">
+                        @csrf
+                        @method('PATCH')
+                        <div class="row g-3 align-items-end">
+                            <div class="col-md-8">
+                                <label class="form-label">Pilih Kelas</label>
+                                <select name="teacher_class_id" class="form-select">
+                                    <option value="">-- Pilih kelas --</option>
+                                    @foreach($classes as $class)
+                                        <option value="{{ $class->id }}">{{ $class->name }} @if($class->teacher) - {{ $class->teacher->name }} @endif</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <button type="submit" class="btn btn-primary w-100">Sambungkan ke Kelas</button>
+                            </div>
+                        </div>
+                    </form>
+                @endif
             </div>
 
             <div class="row g-3">

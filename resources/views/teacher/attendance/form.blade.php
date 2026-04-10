@@ -32,7 +32,7 @@
             <select name="teacher_class_id" class="form-select">
                 <option value="">Pilih kelas</option>
                 @foreach($classes as $class)
-                    <option value="{{ $class->id }}" {{ old('teacher_class_id', $attendance->teacher_class_id ?? '') == $class->id ? 'selected' : '' }}>{{ $class->name }} - {{ $class->subject }}</option>
+                    <option value="{{ $class->id }}" {{ old('teacher_class_id', $attendance->teacher_class_id ?? '') == $class->id ? 'selected' : '' }}>{{ $class->name }}</option>
                 @endforeach
             </select>
         </div>

@@ -33,6 +33,7 @@ $pageTitle = 'Data Guru';
                 <th>Jabatan</th>
                 <th>No HP</th>
                 <th>Email</th>
+                <th>Akun</th>
             </tr>
         </thead>
 
@@ -46,6 +47,7 @@ $pageTitle = 'Data Guru';
                     <td>{{ $teacher->position }}</td>
                     <td>{{ $teacher->phone }}</td>
                     <td>{{ $teacher->email }}</td>
+                    <td>{{ optional($teacher->user)->name ?? '-' }}</td>
                 </tr>
 
             @empty

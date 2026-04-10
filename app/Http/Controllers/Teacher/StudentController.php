@@ -7,22 +7,36 @@ use App\Models\TeacherClass;
 use App\Models\TeacherStudent;
 use Illuminate\Http\Request;
 
-class StudentController extends Controller
+class StudentController extends TeacherBaseController
 {
-    public function index()
+    public function index(Request $request)
     {
-        $teacherId = auth()->id();
-        $students = TeacherStudent::with('class')
+        $teacherId = $this->currentTeacherId();
+        $classes = TeacherClass::withCount('students')
             ->where('teacher_id', $teacherId)
             ->orderBy('name')
             ->get();
 
-        return view('teacher.students.index', compact('students'));
+        $selectedClass = null;
+        $students = null;
+
+        if ($request->filled('class_id')) {
+            $selectedClass = TeacherClass::where('teacher_id', $teacherId)
+                ->findOrFail($request->query('class_id'));
+
+            $students = TeacherStudent::where('teacher_id', $teacherId)
+                ->where('teacher_class_id', $selectedClass->id)
+                ->orderBy('name')
+                ->paginate(12);
+        }
+
+        return view('teacher.students.index', compact('classes', 'selectedClass', 'students'));
     }
 
     public function create()
     {
-        $classes = TeacherClass::where('teacher_id', auth()->id())->orderBy('name')->get();
+        $teacherId = $this->currentTeacherId();
+        $classes = TeacherClass::where('teacher_id', $teacherId)->orderBy('name')->get();
 
         return view('teacher.students.form', compact('classes'));
     }
@@ -38,7 +52,7 @@ class StudentController extends Controller
             'notes' => 'nullable|string',
         ]);
 
-        $data['teacher_id'] = auth()->id();
+        $data['teacher_id'] = $this->currentTeacherId();
         TeacherStudent::create($data);
 
         return redirect()->route('teacher.students.index')->with('success', 'Data siswa berhasil disimpan.');
@@ -46,16 +60,17 @@ class StudentController extends Controller
 
     public function edit(TeacherStudent $student)
     {
-        abort_unless($student->teacher_id === auth()->id(), 403);
+        abort_unless($student->teacher_id === $this->currentTeacherId(), 403);
 
-        $classes = TeacherClass::where('teacher_id', auth()->id())->orderBy('name')->get();
+        $teacherId = $this->currentTeacherId();
+        $classes = TeacherClass::where('teacher_id', $teacherId)->orderBy('name')->get();
 
         return view('teacher.students.form', compact('student', 'classes'));
     }
 
     public function update(Request $request, TeacherStudent $student)
     {
-        abort_unless($student->teacher_id === auth()->id(), 403);
+        abort_unless($student->teacher_id === $this->currentTeacherId(), 403);
 
         $data = $request->validate([
             'name' => 'required|string|max:255',
@@ -73,10 +88,22 @@ class StudentController extends Controller
 
     public function destroy(TeacherStudent $student)
     {
-        abort_unless($student->teacher_id === auth()->id(), 403);
+        abort_unless($student->teacher_id === $this->currentTeacherId(), 403);
 
         $student->delete();
 
         return redirect()->route('teacher.students.index')->with('success', 'Data siswa berhasil dihapus.');
+    }
+
+    public function showClass(TeacherClass $teacher_class)
+    {
+        $teacherId = $this->currentTeacherId();
+        abort_unless($teacher_class->teacher_id === $teacherId, 403);
+
+        $students = TeacherStudent::where('teacher_class_id', $teacher_class->id)
+            ->orderBy('name')
+            ->paginate(12);
+
+        return view('teacher.students.class-list', compact('teacher_class', 'students'));
     }
 }
