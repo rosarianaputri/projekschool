@@ -57,3 +57,31 @@ If you discover a security vulnerability within Laravel, please send an e-mail t
 ## License
 
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+
+## Deploy Aman (Agar Server Sama Dengan Lokal)
+
+Setelah `git pull` di server, jalankan command ini:
+
+```bash
+php artisan app:post-deploy
+```
+
+Command di atas otomatis:
+
+- clear cache/config/route/view
+- jalankan `migrate --force`
+- sinkron akun admin (jika env admin diisi)
+
+Opsional, kalau perlu jalankan seeder juga:
+
+```bash
+php artisan app:post-deploy --seed
+```
+
+Supaya akun admin selalu konsisten setelah deploy, isi env ini di server:
+
+```env
+DEPLOY_ADMIN_EMAIL=admin@gmail.com
+DEPLOY_ADMIN_PASSWORD=isi-password-kuat
+DEPLOY_ADMIN_NAME=Administrator
+```

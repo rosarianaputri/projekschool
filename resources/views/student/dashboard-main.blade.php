@@ -23,6 +23,23 @@
     </div>
 </div>
 
+@if (!$application)
+    <div class="alert alert-warning mb-4" role="alert">
+        <i class="feather-alert-circle me-2"></i>
+        Data pendaftaran belum ada. Silakan isi formulir pendaftaran terlebih dahulu.
+    </div>
+@elseif ($documentSummary && !$documentSummary['is_complete'])
+    <div class="alert alert-info mb-4" role="alert">
+        <i class="feather-info me-2"></i>
+        Berkas belum lengkap: {{ $documentSummary['uploaded_required'] }}/{{ $documentSummary['required_total'] }} dokumen wajib sudah diupload.
+    </div>
+@else
+    <div class="alert alert-success mb-4" role="alert">
+        <i class="feather-check-circle me-2"></i>
+        Berkas persyaratan Anda sudah lengkap.
+    </div>
+@endif
+
 <!-- Main Dashboard Cards -->
 <div class="row">
     <!-- Formulir Pendaftaran -->
@@ -35,7 +52,11 @@
                 <h5 class="text-dark mb-2">Formulir Pendaftaran</h5>
                 <p class="text-muted small mb-0">Isi formulir pendaftaran siswa baru untuk memulai proses registrasi.</p>
                 <div class="mt-3">
-                    <span class="badge bg-primary">Buka Formulir →</span>
+                    @if ($application)
+                        <span class="badge bg-success">Formulir Sudah Diisi</span>
+                    @else
+                        <span class="badge bg-primary">Buka Formulir →</span>
+                    @endif
                 </div>
             </div>
         </a>
@@ -51,7 +72,13 @@
                 <h5 class="text-dark mb-2">Upload Berkas</h5>
                 <p class="text-muted small mb-0">Unggah dokumen persyaratan yang diperlukan untuk melengkapi pendaftaran Anda.</p>
                 <div class="mt-3">
-                    <span class="badge bg-success">Upload Berkas →</span>
+                    @if ($documentSummary && $documentSummary['is_complete'])
+                        <span class="badge bg-success">Berkas Lengkap</span>
+                    @elseif ($documentSummary)
+                        <span class="badge bg-warning text-dark">{{ $documentSummary['uploaded_required'] }}/{{ $documentSummary['required_total'] }} Wajib</span>
+                    @else
+                        <span class="badge bg-secondary">Isi Formulir Dulu</span>
+                    @endif
                 </div>
             </div>
         </a>

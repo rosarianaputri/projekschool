@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pilih Portal Register | LaylaSchool</title>
+    <title>Daftar Akun | LaylaSchool</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <style>
         :root {
@@ -45,7 +45,7 @@
         .portal-grid {
             margin-top: 24px;
             display: grid;
-            grid-template-columns: repeat(2, minmax(0, 1fr));
+            grid-template-columns: 1fr;
             gap: 16px;
         }
 
@@ -77,7 +77,6 @@
         }
 
         .student .portal-icon { color: var(--cyan); }
-        .teacher .portal-icon { color: var(--gold); }
 
         .auth-links {
             margin-top: 20px;
@@ -104,17 +103,12 @@
 </head>
 <body>
     <div class="register-selector">
-        <h1>Pilih Portal Register</h1>
+        <h1>Daftar Akun</h1>
 
         <div class="portal-grid">
             <a class="portal-card student" href="{{ route('register.role', 'siswa') }}">
                 <div class="portal-icon"><i class="fa-solid fa-user-graduate"></i></div>
-                <p class="portal-title">Portal Register Siswa</p>
-            </a>
-
-            <a class="portal-card teacher" href="{{ route('register.role', 'guru') }}">
-                <div class="portal-icon"><i class="fa-solid fa-chalkboard-user"></i></div>
-                <p class="portal-title">Portal Register Guru</p>
+                <p class="portal-title">Daftar Akun Siswa</p>
             </a>
         </div>
 
