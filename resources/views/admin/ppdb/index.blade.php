@@ -134,27 +134,27 @@
                                 </td>
                                 <td>
                                     <div class="d-flex flex-wrap gap-2 align-items-center">
-                                    <a href="{{ route('admin.ppdb.show', $application) }}" class="btn btn-sm btn-primary px-3">Detail</a>
-                                    <a href="{{ route('admin.ppdb.edit', $application) }}" class="btn btn-sm btn-info text-white px-3">Edit</a>
-                                    @if ($application->status !== 'approved')
-                                        <form method="POST" action="{{ route('admin.ppdb.acc', $application) }}" class="m-0">
+                                        <a href="{{ route('admin.ppdb.show', $application) }}" class="btn btn-sm btn-primary px-3">Detail</a>
+                                        <a href="{{ route('admin.ppdb.edit', $application) }}" class="btn btn-sm btn-info text-white px-3">Edit</a>
+                                        @if ($application->status !== 'approved')
+                                            <form method="POST" action="{{ route('admin.ppdb.acc', $application) }}" class="m-0">
+                                                @csrf
+                                                @method('PATCH')
+                                                <button type="submit" class="btn btn-sm btn-success px-3">ACC</button>
+                                            </form>
+                                        @endif
+                                        @if ($application->status !== 'rejected')
+                                            <form method="POST" action="{{ route('admin.ppdb.reject', $application) }}" class="m-0">
+                                                @csrf
+                                                @method('PATCH')
+                                                <button type="submit" class="btn btn-sm btn-warning px-3">Tolak</button>
+                                            </form>
+                                        @endif
+                                        <form method="POST" action="{{ route('admin.ppdb.destroy', $application) }}" class="m-0" onsubmit="return confirm('Hapus data pendaftar ini?');">
                                             @csrf
-                                            @method('PATCH')
-                                            <button type="submit" class="btn btn-sm btn-success px-3">ACC</button>
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-sm btn-danger px-3">Hapus</button>
                                         </form>
-                                    @endif
-                                    @if ($application->status !== 'rejected')
-                                        <form method="POST" action="{{ route('admin.ppdb.reject', $application) }}" class="m-0">
-                                            @csrf
-                                            @method('PATCH')
-                                            <button type="submit" class="btn btn-sm btn-warning px-3">Tolak</button>
-                                        </form>
-                                    @endif
-                                    <form method="POST" action="{{ route('admin.ppdb.destroy', $application) }}" class="m-0" onsubmit="return confirm('Hapus data pendaftar ini?');">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-sm btn-danger px-3">Hapus</button>
-                                    </form>
                                     </div>
                                 </td>
                             </tr>
@@ -168,9 +168,11 @@
             </div>
 
             {{ $applications->links() }}
+        </div>
+    </div>
 
-            <hr class="my-4">
-
+    <div class="card mt-4">
+        <div class="card-body">
             <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-3">
                 <h5 class="mb-0">Aktivitas Login Terbaru</h5>
                 <small class="text-muted">Auto refresh tiap 30 detik</small>

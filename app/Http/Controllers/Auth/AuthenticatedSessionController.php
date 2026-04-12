@@ -9,6 +9,7 @@ use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
 
@@ -101,7 +102,7 @@ class AuthenticatedSessionController extends Controller
         return redirect('/');
     }
 
-    private function normalizeRole(string $role): string
+    protected function normalizeRole(string $role): string
     {
         return match (strtolower($role)) {
             'guru' => 'teacher',
@@ -110,7 +111,7 @@ class AuthenticatedSessionController extends Controller
         };
     }
 
-    private function roleLabel(string $role): string
+    protected function roleLabel(string $role): string
     {
         return match ($role) {
             'admin' => 'Admin',
@@ -122,6 +123,10 @@ class AuthenticatedSessionController extends Controller
 
     private function recordLoginActivity(Request $request, User $user): void
     {
+        if (! Schema::hasTable('login_activities')) {
+            return;
+        }
+
         LoginActivity::create([
             'user_id' => $user->id,
             'name' => $user->name,

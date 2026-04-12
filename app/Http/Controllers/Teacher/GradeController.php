@@ -11,22 +11,23 @@ class GradeController extends TeacherBaseController
     public function index()
     {
         $teacherId = $this->currentTeacherId();
-        $grades = TeacherGrade::with('class')
-            ->whereHas('class', function ($query) use ($teacherId) {
-                $query->where('teacher_id', $teacherId);
-            })
-            ->orderBy('student_name')
-            ->paginate(10);
+        $classes = TeacherClass::with(['grades' => function ($query) {
+                $query->orderBy('student_name');
+            }])
+            ->where('teacher_id', $teacherId)
+            ->orderBy('name')
+            ->get();
 
-        return view('teacher.grades.index', compact('grades'));
+        return view('teacher.grades.index', compact('classes'));
     }
 
-    public function create()
+    public function create(Request $request)
     {
         $teacherId = $this->currentTeacherId();
         $classes = TeacherClass::with('students')->where('teacher_id', $teacherId)->orderBy('name')->get();
+        $selectedClassId = $request->query('class');
 
-        return view('teacher.grades.form', compact('classes'));
+        return view('teacher.grades.form', compact('classes', 'selectedClassId'));
     }
 
     public function store(Request $request)

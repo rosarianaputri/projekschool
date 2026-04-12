@@ -28,7 +28,7 @@
             <select name="teacher_class_id" id="classSelect" class="form-select" required>
                 <option value="">Pilih kelas</option>
                 @foreach($classes as $class)
-                    <option value="{{ $class->id }}" {{ old('teacher_class_id', $grade->teacher_class_id ?? '') == $class->id ? 'selected' : '' }}>{{ $class->name }} - {{ $class->subject }}</option>
+                    <option value="{{ $class->id }}" {{ old('teacher_class_id', $grade->teacher_class_id ?? ($selectedClassId ?? '')) == $class->id ? 'selected' : '' }}>{{ $class->name }} - {{ $class->subject }}</option>
                 @endforeach
             </select>
         </div>
@@ -85,6 +85,7 @@
         };
 
         const selectedStudent = "{{ old('student_name', $grade->student_name ?? '') }}";
+        const selectedClassId = "{{ old('teacher_class_id', $grade->teacher_class_id ?? ($selectedClassId ?? '')) }}";
 
         function setStudentOptions(classId) {
             studentSelect.innerHTML = '';
@@ -115,34 +116,39 @@
             if (selectedClass && hasStudents) {
                 studentSelect.classList.remove('d-none');
                 studentSelect.disabled = false;
-            studentText.classList.add('d-none');
-            studentText.disabled = true;
-            studentNameHidden.value = studentSelect.value;
-        } else if (selectedClass && !hasStudents) {
-            studentSelect.classList.remove('d-none');
-            studentSelect.disabled = true;
-            studentText.classList.remove('d-none');
-            studentText.disabled = false;
-            studentText.focus();
-            studentNameHidden.value = studentText.value;
-        } else {
-            studentSelect.classList.remove('d-none');
-            studentSelect.disabled = true;
-            studentText.classList.add('d-none');
-            studentText.disabled = true;
-            studentNameHidden.value = '';
+                studentText.classList.add('d-none');
+                studentText.disabled = true;
+                studentNameHidden.value = studentSelect.value;
+            } else if (selectedClass && !hasStudents) {
+                studentSelect.classList.remove('d-none');
+                studentSelect.disabled = true;
+                studentText.classList.remove('d-none');
+                studentText.disabled = false;
+                studentText.focus();
+                studentNameHidden.value = studentText.value;
+            } else {
+                studentSelect.classList.remove('d-none');
+                studentSelect.disabled = true;
+                studentText.classList.add('d-none');
+                studentText.disabled = true;
+                studentNameHidden.value = '';
+            }
         }
-    }
 
-    studentSelect.addEventListener('change', function () {
-        studentNameHidden.value = this.value;
-    });
+        studentSelect.addEventListener('change', function () {
+            studentNameHidden.value = this.value;
+        });
 
-    studentText.addEventListener('input', function () {
-        studentNameHidden.value = this.value;
-    });
+        studentText.addEventListener('input', function () {
+            studentNameHidden.value = this.value;
+        });
 
-    classSelect.addEventListener('change', updateStudentFields);
-    updateStudentFields();
+        if (selectedClassId && !classSelect.value) {
+            classSelect.value = selectedClassId;
+        }
+
+        classSelect.addEventListener('change', updateStudentFields);
+        updateStudentFields();
+        classSelect.dispatchEvent(new Event('change'));
 </script>
 @endsection

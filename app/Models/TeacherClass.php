@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use App\Models\Teacher;
+use App\Models\TeacherGrade;
 use App\Models\TeacherStudent;
 
 class TeacherClass extends Model
@@ -30,5 +31,10 @@ class TeacherClass extends Model
     public function students(): HasMany
     {
         return $this->hasMany(TeacherStudent::class);
+    }
+
+    public function grades(): HasMany
+    {
+        return $this->hasMany(TeacherGrade::class, 'teacher_class_id');
     }
 }

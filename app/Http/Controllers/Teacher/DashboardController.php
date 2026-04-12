@@ -31,7 +31,11 @@ class DashboardController extends Controller
             })->whereDate('date', now())->count(),
         ];
 
-        $classes = TeacherClass::where('teacher_id', $teacherId)->orderBy('name')->limit(4)->get();
+        $classes = TeacherClass::where('teacher_id', $teacherId)
+            ->withCount('students')
+            ->orderBy('name')
+            ->limit(4)
+            ->get();
         $todaySchedule = TeacherSchedule::whereHas('class', function ($query) use ($teacherId) {
                 $query->where('teacher_id', $teacherId);
             })
