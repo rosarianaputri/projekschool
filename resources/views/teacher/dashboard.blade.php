@@ -100,12 +100,12 @@
                             <div class="border rounded-3 p-3 h-100">
                                 <div class="d-flex align-items-start justify-content-between mb-2">
                                     <div>
-                                        <h6 class="mb-1">{{ $class['name'] }}</h6>
-                                        <p class="text-muted small mb-0">{{ $class['subject'] }}</p>
+                                        <h6 class="mb-1">{{ $class->name }}</h6>
+                                        <p class="text-muted small mb-0">{{ $class->subject }}</p>
                                     </div>
-                                    <span class="badge bg-primary">{{ $class['students'] }} siswa</span>
+                                    <span class="badge bg-primary">{{ $class->students_count }} siswa</span>
                                 </div>
-                                <p class="text-muted small mb-0">{{ $class['schedule'] }}</p>
+                                <p class="text-muted small mb-0">{{ $class->schedule }}</p>
                                 <div class="mt-3">
                                     <a href="{{ route('teacher.classes.index') }}" class="btn btn-sm btn-secondary">Detail Kelas</a>
                                 </div>
