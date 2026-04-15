@@ -15,7 +15,7 @@
                         <h3 class="mb-1">Manajemen Jadwal</h3>
                         <p class="text-muted mb-0">Atur jadwal kelas, waktu belajar, dan ruang agar guru dan siswa tinggal mengikuti.</p>
                     </div>
-                    <a href="{{ route('schedules.create') }}" class="btn btn-primary">
+                    <a href="{{ route('admin.schedules.create') }}" class="btn btn-primary">
                         <i class="fas fa-plus me-1"></i> Tambah Jadwal
                     </a>
                 </div>
