@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Masuk Akun | LaylaSchool</title>
+    <title>Daftar Akun | LaylaSchool</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <style>
         :root {
@@ -17,6 +17,9 @@
             --danger-bg: #fff1f1;
             --danger-border: #f2c3c3;
             --danger-text: #a02828;
+            --success-bg: #eefaf6;
+            --success-border: #bfe7d5;
+            --success-text: #1c6b4a;
         }
 
         * {
@@ -36,7 +39,7 @@
             padding: 24px;
         }
 
-        .login-shell {
+        .register-shell {
             width: 100%;
             max-width: 1080px;
             display: grid;
@@ -47,7 +50,7 @@
             box-shadow: 0 18px 50px rgba(0, 0, 0, 0.24);
         }
 
-        .login-left {
+        .register-left {
             padding: 48px 40px;
             background: linear-gradient(145deg, rgba(14, 53, 95, 0.97), rgba(22, 86, 118, 0.94));
             color: #fff;
@@ -69,13 +72,13 @@
             width: fit-content;
         }
 
-        .login-left h1 {
+        .register-left h1 {
             margin: 0 0 14px;
             font-size: 2.15rem;
             line-height: 1.2;
         }
 
-        .login-left p {
+        .register-left p {
             margin: 0 0 16px;
             color: rgba(255,255,255,0.86);
             line-height: 1.8;
@@ -93,18 +96,18 @@
             max-width: 520px;
         }
 
-        .login-right {
+        .register-right {
             padding: 42px 34px;
             background: rgba(255,255,255,0.98);
         }
 
-        .login-header h2 {
+        .register-header h2 {
             margin: 0;
             color: var(--text-main);
             font-size: 1.9rem;
         }
 
-        .login-header p {
+        .register-header p {
             margin: 10px 0 0;
             color: var(--text-muted);
             line-height: 1.6;
@@ -119,6 +122,17 @@
             background: var(--danger-bg);
             border: 1px solid var(--danger-border);
             color: var(--danger-text);
+        }
+
+        .success-box {
+            margin-top: 18px;
+            border-radius: 12px;
+            padding: 12px 14px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            background: var(--success-bg);
+            border: 1px solid var(--success-border);
+            color: var(--success-text);
         }
 
         .form-wrap {
@@ -137,7 +151,8 @@
             font-weight: 700;
         }
 
-        .form-group input {
+        .form-group input,
+        .form-group select {
             width: 100%;
             border: 1px solid var(--line);
             border-radius: 12px;
@@ -147,7 +162,8 @@
             background: #fff;
         }
 
-        .form-group input:focus {
+        .form-group input:focus,
+        .form-group select:focus {
             border-color: #8ab0d8;
             box-shadow: 0 0 0 3px rgba(88, 131, 181, 0.12);
         }
@@ -177,22 +193,7 @@
             color: #0e355f;
         }
 
-        .remember {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-top: 2px;
-            margin-bottom: 18px;
-            color: #415b7a;
-            font-size: 0.9rem;
-        }
-
-        .remember input {
-            width: auto;
-            margin: 0;
-        }
-
-        .login-btn {
+        .register-btn {
             width: 100%;
             border: none;
             border-radius: 12px;
@@ -205,7 +206,7 @@
             transition: transform 0.2s ease, opacity 0.2s ease;
         }
 
-        .login-btn:hover {
+        .register-btn:hover {
             transform: translateY(-1px);
             opacity: 0.95;
         }
@@ -252,56 +253,56 @@
         }
 
         @media (max-width: 920px) {
-            .login-shell {
+            .register-shell {
                 grid-template-columns: 1fr;
             }
 
-            .login-left,
-            .login-right {
+            .register-left,
+            .register-right {
                 padding: 30px 22px;
             }
 
-            .login-left h1 {
+            .register-left h1 {
                 font-size: 1.8rem;
             }
         }
     </style>
 </head>
 <body>
-    <div class="login-shell">
-        <div class="login-left">
+    <div class="register-shell">
+        <div class="register-left">
             <div class="brand-badge">
-                <i class="fa-solid fa-school"></i>
+                <i class="fa-solid fa-user-graduate"></i>
                 <span>LaylaSchool Portal</span>
             </div>
 
-            <h1>Selamat datang di LaylaSchool</h1>
+            <h1>Buat akun siswa baru</h1>
 
             <p>
-                LaylaSchool merupakan sistem informasi sekolah yang dirancang untuk membantu proses
-                pembelajaran dan pengelolaan data akademik dalam satu platform yang terintegrasi.
+                Halaman ini digunakan oleh siswa untuk membuat akun dan mengakses portal sekolah
+                secara mandiri melalui sistem LaylaSchool.
             </p>
 
             <p>
-                Melalui sistem ini, pengguna dapat mengakses informasi sekolah, kegiatan belajar,
-                serta kebutuhan administrasi dengan lebih mudah, tertata, dan efisien.
+                Setelah akun berhasil dibuat, data siswa akan diproses oleh pihak sekolah sesuai
+                alur verifikasi yang berlaku pada sistem.
             </p>
 
             <div class="school-note">
-                Portal ini digunakan sebagai media utama untuk mendukung aktivitas sekolah secara digital,
-                mulai dari pengelolaan data hingga akses informasi pembelajaran.
+                Pastikan data yang dimasukkan sudah benar, terutama nama, email, dan password,
+                agar proses aktivasi akun dapat berjalan dengan lancar.
             </div>
         </div>
 
-        <div class="login-right">
-            <div class="login-header">
-                <h2>Masuk ke Akun</h2>
-                <p>Gunakan email dan password yang sudah terdaftar di sistem.</p>
+        <div class="register-right">
+            <div class="register-header">
+                <h2>Daftar Akun Siswa</h2>
+                <p>Isi data berikut untuk membuat akun baru di sistem.</p>
             </div>
 
-            @if (session('error'))
-                <div class="error-box">
-                    {{ session('error') }}
+            @if (session('status'))
+                <div class="success-box">
+                    {{ session('status') }}
                 </div>
             @endif
 
@@ -312,8 +313,21 @@
             @endif
 
             <div class="form-wrap">
-                <form method="POST" action="{{ route('login') }}">
+                <form method="POST" action="{{ route('register') }}">
                     @csrf
+
+                    <div class="form-group">
+                        <label for="name">Nama Lengkap</label>
+                        <input
+                            id="name"
+                            type="text"
+                            name="name"
+                            value="{{ old('name') }}"
+                            placeholder="Masukkan nama lengkap"
+                            required
+                            autofocus
+                        >
+                    </div>
 
                     <div class="form-group">
                         <label for="email">Email</label>
@@ -324,7 +338,6 @@
                             value="{{ old('email') }}"
                             placeholder="Masukkan email"
                             required
-                            autofocus
                         >
                     </div>
 
@@ -344,21 +357,29 @@
                         </div>
                     </div>
 
-                    <label class="remember" for="remember">
-                        <input id="remember" type="checkbox" name="remember" value="1" {{ old('remember') ? 'checked' : '' }}>
-                        Ingat saya
-                    </label>
+                    <div class="form-group">
+                        <label for="password_confirmation">Konfirmasi Password</label>
+                        <div class="password-wrap">
+                            <input
+                                id="password_confirmation"
+                                type="password"
+                                name="password_confirmation"
+                                placeholder="Ulangi password"
+                                required
+                            >
+                            <button type="button" class="toggle-password" data-target="password_confirmation">
+                                <i class="fa-solid fa-eye"></i>
+                            </button>
+                        </div>
+                    </div>
 
-                    <button class="login-btn" type="submit">
-                        Masuk
+                    <button class="register-btn" type="submit">
+                        Daftar Sekarang
                     </button>
 
                     <div class="links">
-                        @if (Route::has('password.request'))
-                            <a href="{{ route('password.request') }}">Lupa password?</a>
-                        @endif
-
-                        <a href="{{ route('register') }}">Daftar akun siswa</a>
+                        <a href="{{ route('login') }}">Sudah punya akun? Masuk</a>
+                        <a href="{{ route('front.home') }}">Kembali ke beranda</a>
                     </div>
                 </form>
             </div>
@@ -366,8 +387,8 @@
             <div class="helper-box">
                 <h4>Informasi</h4>
                 <p>
-                    Siswa dapat membuat akun melalui halaman pendaftaran. Akun guru dan admin
-                    dikelola langsung oleh pihak sekolah.
+                    Setelah registrasi berhasil, akun siswa akan masuk ke sistem dengan status
+                    pending dan dapat menunggu proses persetujuan dari pihak sekolah.
                 </p>
             </div>
         </div>
