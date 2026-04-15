@@ -10,13 +10,12 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Schema;
-use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
 
 class AuthenticatedSessionController extends Controller
 {
     /**
-     * Tampilkan halaman login
+     * Tampilkan halaman login universal
      */
     public function create(): View
     {
@@ -24,24 +23,7 @@ class AuthenticatedSessionController extends Controller
     }
 
     /**
-     * Tampilkan halaman login sesuai role.
-     */
-    public function createRoleLogin(string $role): View
-    {
-        $normalizedRole = $this->normalizeRole($role);
-
-        if (! in_array($normalizedRole, ['admin', 'teacher', 'student'], true)) {
-            abort(404);
-        }
-
-        return view('auth.login-role', [
-            'role' => $normalizedRole,
-            'roleLabel' => $this->roleLabel($normalizedRole),
-        ]);
-    }
-
-    /**
-     * Proses login user
+     * Proses login universal
      */
     public function store(LoginRequest $request): RedirectResponse
     {
@@ -50,39 +32,7 @@ class AuthenticatedSessionController extends Controller
 
         /** @var User $user */
         $user = Auth::user();
-        $this->recordLoginActivity($request, $user);
 
-        return redirect()->intended($user->dashboardPath());
-    }
-
-    /**
-     * Proses login user berdasarkan portal role yang dipilih.
-     */
-    public function storeRoleLogin(LoginRequest $request, string $role): RedirectResponse
-    {
-        $expectedRole = $this->normalizeRole($role);
-
-        if (! in_array($expectedRole, ['admin', 'teacher', 'student'], true)) {
-            throw ValidationException::withMessages([
-                'email' => 'Role login tidak valid.',
-            ]);
-        }
-
-        $candidateUser = User::query()
-            ->where('email', (string) $request->string('email'))
-            ->first();
-
-        if ($candidateUser && $this->normalizeRole((string) $candidateUser->role) !== $expectedRole) {
-            throw ValidationException::withMessages([
-                'email' => 'Akun ini bukan untuk portal '.$this->roleLabel($expectedRole).'.',
-            ]);
-        }
-
-        $request->authenticate();
-        $request->session()->regenerate();
-
-        /** @var User $user */
-        $user = Auth::user();
         $this->recordLoginActivity($request, $user);
 
         return redirect()->intended($user->dashboardPath());
@@ -96,29 +46,9 @@ class AuthenticatedSessionController extends Controller
         Auth::guard('web')->logout();
 
         $request->session()->invalidate();
-
         $request->session()->regenerateToken();
 
-        return redirect('/');
-    }
-
-    protected function normalizeRole(string $role): string
-    {
-        return match (strtolower($role)) {
-            'guru' => 'teacher',
-            'siswa' => 'student',
-            default => strtolower($role),
-        };
-    }
-
-    protected function roleLabel(string $role): string
-    {
-        return match ($role) {
-            'admin' => 'Admin',
-            'teacher' => 'Guru',
-            'student' => 'Siswa',
-            default => ucfirst($role),
-        };
+        return redirect()->route('login');
     }
 
     private function recordLoginActivity(Request $request, User $user): void

@@ -60,6 +60,12 @@
                         </a>
                     </li>
                     <li class="nxl-item">
+    <a href="{{ route('student.materials') }}" class="nxl-link">
+        <span class="nxl-micon"><i class="feather-book-open"></i></span>
+        <span class="nxl-mtext">Materi</span>
+    </a>
+</li>
+                    <li class="nxl-item">
                         <a href="{{ route('student.status') }}" class="nxl-link">
                             <span class="nxl-micon"><i class="feather-clock"></i></span>
                             <span class="nxl-mtext">Status Pendaftaran</span>
@@ -141,6 +147,16 @@
                                 <i class="feather-home"></i>
                                 <span>Dashboard</span>
                             </a>
+                            <a href="{{ route('student.materials') }}" class="dropdown-item">
+                                 <i class="feather-book-open"></i>
+                                 <span>Materi</span>
+                                 </a>
+                            <li class="nxl-item">
+                                <a href="{{ route('student.schedule') }}" class="nxl-link">
+                                    <span class="nxl-micon"><i class="feather-calendar"></i></span>
+                                    <span class="nxl-mtext">Jadwal</span>
+                                </a>
+                            </li>
                             <a href="{{ route('profile.edit') }}" class="dropdown-item">
                                 <i class="feather-settings"></i>
                                 <span>Edit Profile</span>

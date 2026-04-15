@@ -1,4 +1,4 @@
-@extends('layouts.student')
+    @extends('layouts.student')
 
 @section('content')
 
@@ -45,7 +45,9 @@
                                 </div>
                                 <div class="text-end">
                                     <p class="text-muted small mb-1">Tanggal Pendaftaran</p>
-                                    <h6 class="text-dark">{{ $application->created_at->format('d M Y') }}</h6>
+                                    <h6 class="text-dark">
+                                        {{ $application->birth_date ? \Carbon\Carbon::parse($application->birth_date)->format('d M Y') : '-' }}
+                                    </h6>
                                 </div>
                             </div>
                         </div>

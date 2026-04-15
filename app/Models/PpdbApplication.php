@@ -4,8 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class PpdbApplication extends Model
 {
@@ -20,48 +18,45 @@ class PpdbApplication extends Model
         'previous_school',
         'parent_name',
         'phone',
-        'email',
         'address',
+        'email',
         'notes',
         'status',
-        'approved_at',
-        'approved_by',
+        'teacher_class_id',
     ];
 
-    protected function casts(): array
+    protected $casts = [
+        'birth_date' => 'date',
+    ];
+
+    public function documents()
     {
-        return [
-            'birth_date' => 'date',
-            'approved_at' => 'datetime',
-        ];
+        return $this->hasMany(PpdbDocument::class, 'ppdb_application_id');
     }
 
-    public function approver(): BelongsTo
+    public function teacherClass()
     {
-        return $this->belongsTo(User::class, 'approved_by');
-    }
-
-    public function documents(): HasMany
-    {
-        return $this->hasMany(PpdbApplicationDocument::class, 'ppdb_application_id');
+        return $this->belongsTo(TeacherClass::class, 'teacher_class_id');
     }
 
     public function documentSummary(): array
     {
-        $requiredTypes = array_keys(PpdbApplicationDocument::REQUIRED_DOCUMENTS);
-        $uploadedTypes = $this->documents
-            ->pluck('document_type')
-            ->unique()
-            ->values()
-            ->all();
+        $documents = $this->documents ?? collect();
 
-        $missingTypes = array_values(array_diff($requiredTypes, $uploadedTypes));
+        $requiredTypes = [
+            'akta_kelahiran',
+            'ktp_orang_tua',
+            'rapor',
+        ];
+
+        $uploadedRequired = $documents
+            ->whereIn('document_type', $requiredTypes)
+            ->count();
 
         return [
             'required_total' => count($requiredTypes),
-            'uploaded_required' => count($requiredTypes) - count($missingTypes),
-            'missing_types' => $missingTypes,
-            'is_complete' => count($missingTypes) === 0,
+            'uploaded_required' => $uploadedRequired,
+            'is_complete' => $uploadedRequired >= count($requiredTypes),
         ];
     }
 }

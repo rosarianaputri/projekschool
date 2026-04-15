@@ -81,9 +81,11 @@ class ScheduleController extends TeacherBaseController
     }
 
     public function destroy(TeacherSchedule $teacher_schedule)
-    {
-        abort_unless($teacher_schedule->class && $teacher_schedule->class->teacher_id === $this->currentTeacherId(), 403);
+{
+    abort_unless($teacher_schedule->class && $teacher_schedule->class->teacher_id === $this->currentTeacherId(), 403);
 
-        return redirect()->route('teacher.schedule.index')->with('success', 'Jadwal berhasil dihapus.');
-    }
+    $teacher_schedule->delete();
+
+    return redirect()->route('teacher.schedule.index')->with('success', 'Jadwal berhasil dihapus.');
+}
 }

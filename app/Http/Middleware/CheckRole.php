@@ -1,5 +1,6 @@
 <?php
- namespace App\Http\Middleware;
+
+namespace App\Http\Middleware;
 
 use Closure;
 use App\Models\User;
@@ -24,7 +25,9 @@ class CheckRole
         /** @var User $user */
         $user = Auth::user();
 
-        return redirect()->to($user->dashboardPath());
+        return redirect()
+            ->to($user->dashboardPath())
+            ->with('error', 'Anda tidak punya akses ke halaman tersebut. Silakan gunakan area sesuai role akun Anda.');
     }
 
     private function normalizeRole(string $role): string
