@@ -81,7 +81,7 @@
                                         <td>{{ $class->schedule ?: '-' }}</td>
                                         <td class="text-end pe-3">
                                             <div class="d-inline-flex gap-2">
-                                                <a href="{{ route('classes.edit', $class) }}" class="btn btn-sm btn-outline-primary">
+                                                <a href="{{ route('admin.classes.edit', $class) }}" class="btn btn-sm btn-outline-primary">
                                                     Edit
                                                 </a>
                                                 <form action="{{ route('admin.classes.destroy', $class) }}" method="POST" class="d-inline">
