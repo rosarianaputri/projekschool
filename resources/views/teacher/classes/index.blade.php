@@ -427,5 +427,4 @@
             </div>
         @endif
     @endforeach
-@endif
 @endsection
