@@ -27,5 +27,9 @@ class DatabaseSeeder extends Seeder
             TeacherClassSeeder::class,
             TeacherStudentSeeder::class,
         ]);
+
+        $this->call([
+    AdminUserSeeder::class,
+      ]);
     }
 }

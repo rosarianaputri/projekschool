@@ -4,11 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use App\Models\Teacher;
-use App\Models\TeacherGrade;
-use App\Models\TeacherStudent;
 
 class TeacherClass extends Model
 {
@@ -23,18 +18,32 @@ class TeacherClass extends Model
         'room',
     ];
 
-    public function teacher(): BelongsTo
+    public function teacher()
     {
         return $this->belongsTo(Teacher::class);
     }
 
-    public function students(): HasMany
+    public function students()
     {
-        return $this->hasMany(TeacherStudent::class);
+        return $this->hasMany(TeacherStudent::class, 'teacher_class_id');
     }
 
-    public function grades(): HasMany
+    public function materials()
     {
-        return $this->hasMany(TeacherGrade::class, 'teacher_class_id');
+        return $this->hasMany(TeacherMaterial::class, 'teacher_class_id');
+    }
+
+    public function assignments()
+    {
+        return $this->hasMany(TeacherAssignment::class, 'teacher_class_id');
+    }
+
+    public function schedules()
+    {
+        return $this->hasMany(TeacherSchedule::class, 'teacher_class_id');
+    }
+    public function classes()
+    {
+        return $this->hasMany(TeacherClass::class);
     }
 }

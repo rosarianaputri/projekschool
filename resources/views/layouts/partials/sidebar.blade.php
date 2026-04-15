@@ -1,6 +1,5 @@
 <nav class="nxl-navigation">
     @php
-        // Ambil logo dari pengaturan
         $logoPath = \App\Models\SiteSetting::getValue('school_logo');
         $logoUrl = $logoPath ? asset($logoPath) : asset('images/default-logo.png');
     @endphp
@@ -17,6 +16,7 @@
                 <li class="nxl-item nxl-caption">
                     <label>Navigation</label>
                 </li>
+
                 <li class="nxl-item nxl-hasmenu">
                     <a href="{{ route('dashboard') }}" class="nxl-link">
                         <span class="nxl-micon"><i class="feather-home"></i></span>
@@ -24,110 +24,155 @@
                     </a>
                 </li>
 
-                @if(auth()->user()->role === 'admin')
+                @if(auth()->check() && auth()->user()->role === 'admin')
                     <li class="nxl-item nxl-hasmenu">
                         <a href="{{ route('admin.home') }}" class="nxl-link">
                             <span class="nxl-micon"><i class="feather-globe"></i></span>
                             <span class="nxl-mtext">Home</span>
                         </a>
                     </li>
+
                     <li class="nxl-item nxl-hasmenu">
                         <a href="{{ route('admin.about') }}" class="nxl-link">
                             <span class="nxl-micon"><i class="feather-info"></i></span>
                             <span class="nxl-mtext">About</span>
                         </a>
                     </li>
+
                     <li class="nxl-item nxl-hasmenu">
                         <a href="{{ route('admin.academic') }}" class="nxl-link">
                             <span class="nxl-micon"><i class="feather-book"></i></span>
                             <span class="nxl-mtext">Academic</span>
                         </a>
                     </li>
+
                     <li class="nxl-item nxl-hasmenu">
                         <a href="{{ route('admin.facilities') }}" class="nxl-link">
                             <span class="nxl-micon"><i class="feather-grid"></i></span>
                             <span class="nxl-mtext">Facilities</span>
                         </a>
                     </li>
+
                     <li class="nxl-item nxl-hasmenu">
                         <a href="{{ route('admin.student_life') }}" class="nxl-link">
                             <span class="nxl-micon"><i class="feather-smile"></i></span>
                             <span class="nxl-mtext">Student Life</span>
                         </a>
                     </li>
+
                     <li class="nxl-item nxl-hasmenu">
                         <a href="{{ route('admin.information') }}" class="nxl-link">
                             <span class="nxl-micon"><i class="feather-file-text"></i></span>
                             <span class="nxl-mtext">Information</span>
                         </a>
                     </li>
+
                     <li class="nxl-item nxl-hasmenu">
                         <a href="{{ route('admin.contact') }}" class="nxl-link">
                             <span class="nxl-micon"><i class="feather-phone"></i></span>
                             <span class="nxl-mtext">Contact</span>
                         </a>
                     </li>
+
                     <li class="nxl-item nxl-hasmenu">
-                        <a href="{{ route('teachers.index') }}" class="nxl-link">
+                        <a href="{{ route('admin.teachers.index') }}" class="nxl-link">
                             <span class="nxl-micon"><i class="feather-users"></i></span>
                             <span class="nxl-mtext">Teachers</span>
                         </a>
                     </li>
+
                     <li class="nxl-item nxl-hasmenu">
-                        <a href="{{ route('students.index') }}" class="nxl-link">
+                        <a href="{{ route('admin.students.index') }}" class="nxl-link">
                             <span class="nxl-micon"><i class="feather-user"></i></span>
                             <span class="nxl-mtext">Students</span>
                         </a>
                     </li>
+
                     <li class="nxl-item nxl-hasmenu">
                         <a href="{{ route('admin.ppdb.index') }}" class="nxl-link">
                             <span class="nxl-micon"><i class="feather-user-plus"></i></span>
                             <span class="nxl-mtext">PPDB</span>
                         </a>
                     </li>
-                @elseif(auth()->user()->role === 'teacher')
+
+                    <li class="nxl-item nxl-hasmenu">
+                        <a href="{{ route('admin.classes.index') }}" class="nxl-link">
+                            <span class="nxl-micon"><i class="feather-layers"></i></span>
+                            <span class="nxl-mtext">Classes</span>
+                        </a>
+                    </li>
+
+                    <li class="nxl-item nxl-hasmenu">
+                        <a href="{{ route('admin.schedules.index') }}" class="nxl-link">
+                            <span class="nxl-micon"><i class="feather-calendar"></i></span>
+                            <span class="nxl-mtext">Schedules</span>
+                        </a>
+                    </li>
+
+                    <li class="nxl-item nxl-hasmenu">
+                        <a href="{{ route('admin.student-approvals.index') }}" class="nxl-link">
+                            <span class="nxl-micon"><i class="feather-user-check"></i></span>
+                            <span class="nxl-mtext">Approval Siswa</span>
+                        </a>
+                    </li>
+
+                @elseif(auth()->check() && auth()->user()->role === 'teacher')
+                    <li class="nxl-item nxl-hasmenu">
+                        <a href="{{ route('teacher.dashboard') }}" class="nxl-link">
+                            <span class="nxl-micon"><i class="feather-home"></i></span>
+                            <span class="nxl-mtext">Dashboard Guru</span>
+                        </a>
+                    </li>
+
                     <li class="nxl-item nxl-hasmenu">
                         <a href="{{ route('teacher.classes.index') }}" class="nxl-link">
                             <span class="nxl-micon"><i class="feather-book-open"></i></span>
                             <span class="nxl-mtext">Kelas</span>
                         </a>
                     </li>
+
                     <li class="nxl-item nxl-hasmenu">
                         <a href="{{ route('teacher.students.index') }}" class="nxl-link">
                             <span class="nxl-micon"><i class="feather-users"></i></span>
                             <span class="nxl-mtext">Siswa</span>
                         </a>
                     </li>
+
                     <li class="nxl-item nxl-hasmenu">
                         <a href="{{ route('teacher.attendance.index') }}" class="nxl-link">
                             <span class="nxl-micon"><i class="feather-check-circle"></i></span>
                             <span class="nxl-mtext">Absensi</span>
                         </a>
                     </li>
+
                     <li class="nxl-item nxl-hasmenu">
                         <a href="{{ route('teacher.grades.index') }}" class="nxl-link">
                             <span class="nxl-micon"><i class="feather-award"></i></span>
                             <span class="nxl-mtext">Nilai</span>
                         </a>
                     </li>
+
                     <li class="nxl-item nxl-hasmenu">
                         <a href="{{ route('teacher.assignments.index') }}" class="nxl-link">
                             <span class="nxl-micon"><i class="feather-file-text"></i></span>
                             <span class="nxl-mtext">Tugas</span>
                         </a>
                     </li>
+
                     <li class="nxl-item nxl-hasmenu">
                         <a href="{{ route('teacher.materials.index') }}" class="nxl-link">
                             <span class="nxl-micon"><i class="feather-folder"></i></span>
                             <span class="nxl-mtext">Materi</span>
                         </a>
                     </li>
+
                     <li class="nxl-item nxl-hasmenu">
                         <a href="{{ route('teacher.schedule.index') }}" class="nxl-link">
                             <span class="nxl-micon"><i class="feather-calendar"></i></span>
                             <span class="nxl-mtext">Jadwal</span>
                         </a>
                     </li>
+
                     <li class="nxl-item nxl-hasmenu">
                         <a href="{{ route('teacher.reports.index') }}" class="nxl-link">
                             <span class="nxl-micon"><i class="feather-bar-chart"></i></span>
@@ -138,7 +183,7 @@
                     @php
                         $teacher = auth()->user()->teacher;
                         $classes = $teacher ? $teacher->classes : collect();
-                        $totalStudents = $teacher ? $teacher->students->count() : 0;
+                        $totalStudents = $teacher && method_exists($teacher, 'students') ? $teacher->students->count() : 0;
                     @endphp
 
                     <li class="nxl-item nxl-caption">
@@ -152,7 +197,9 @@
                                     <span class="nxl-micon"><i class="feather-book"></i></span>
                                     <div style="display: flex; flex-direction: column; flex: 1;">
                                         <span class="nxl-mtext" style="font-size: 12px; font-weight: 600;">{{ $class->name }}</span>
-                                        <span style="font-size: 11px; color: #6c757d;">{{ $class->subject }} • {{ $class->students->count() }}/36 siswa</span>
+                                        <span style="font-size: 11px; color: #6c757d;">
+                                            {{ $class->subject }} • {{ $class->students->count() }}/36 siswa
+                                        </span>
                                     </div>
                                 </div>
                             </li>
@@ -176,18 +223,46 @@
                         </li>
                     @endif
 
-                @elseif(auth()->user()->role === 'student')
+                @elseif(auth()->check() && auth()->user()->role === 'student')
                     <li class="nxl-item nxl-hasmenu">
                         <a href="{{ route('student.dashboard') }}" class="nxl-link">
                             <span class="nxl-micon"><i class="feather-home"></i></span>
                             <span class="nxl-mtext">Dashboard Siswa</span>
                         </a>
                     </li>
+
+                    @if(Route::has('student.materials'))
+                        <li class="nxl-item nxl-hasmenu">
+                            <a href="{{ route('student.materials') }}" class="nxl-link">
+                                <span class="nxl-micon"><i class="feather-book-open"></i></span>
+                                <span class="nxl-mtext">Materi</span>
+                            </a>
+                        </li>
+                    @endif
+
+                    @if(Route::has('student.schedule'))
+                        <li class="nxl-item nxl-hasmenu">
+                            <a href="{{ route('student.schedule') }}" class="nxl-link">
+                                <span class="nxl-micon"><i class="feather-calendar"></i></span>
+                                <span class="nxl-mtext">Jadwal</span>
+                            </a>
+                        </li>
+                    @endif
+
+                    @if(Route::has('student.status'))
+                        <li class="nxl-item nxl-hasmenu">
+                            <a href="{{ route('student.status') }}" class="nxl-link">
+                                <span class="nxl-micon"><i class="feather-clipboard"></i></span>
+                                <span class="nxl-mtext">Status</span>
+                            </a>
+                        </li>
+                    @endif
                 @endif
 
                 <li class="nxl-item nxl-caption">
                     <label>Frontend</label>
                 </li>
+
                 <li class="nxl-item nxl-hasmenu">
                     <a href="{{ route('front.home') }}" class="nxl-link" target="_blank">
                         <span class="nxl-micon"><i class="feather-external-link"></i></span>
@@ -195,16 +270,18 @@
                     </a>
                 </li>
 
-                @if(auth()->user()->role === 'admin')
+                @if(auth()->check() && auth()->user()->role === 'admin')
                     <li class="nxl-item nxl-caption">
                         <label>Settings</label>
                     </li>
+
                     <li class="nxl-item nxl-hasmenu">
                         <a href="{{ route('admin.settings.logo.edit') }}" class="nxl-link">
                             <span class="nxl-micon"><i class="feather-image"></i></span>
                             <span class="nxl-mtext">Logo</span>
                         </a>
                     </li>
+
                     <li class="nxl-item nxl-hasmenu">
                         <a href="{{ route('admin.settings.footer.edit') }}" class="nxl-link">
                             <span class="nxl-micon"><i class="feather-layout"></i></span>
@@ -212,6 +289,7 @@
                         </a>
                     </li>
                 @endif
+
                 <li class="nxl-item nxl-hasmenu">
                     <a href="{{ route('profile.edit') }}" class="nxl-link">
                         <span class="nxl-micon"><i class="feather-user"></i></span>

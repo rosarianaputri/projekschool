@@ -4,8 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use App\Models\TeacherClass;
 
 class TeacherSchedule extends Model
 {
@@ -19,7 +17,7 @@ class TeacherSchedule extends Model
         'room',
     ];
 
-    public function class(): BelongsTo
+    public function class()
     {
         return $this->belongsTo(TeacherClass::class, 'teacher_class_id');
     }

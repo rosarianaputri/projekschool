@@ -336,10 +336,7 @@
         <h4 class="mb-1">Kelas Saya</h4>
         <p class="text-muted mb-0">Pilih kelas yang sudah dibentuk admin. Tampilan guru hanya menampilkan nama kelas, tanpa mata pelajaran atau jadwal.</p>
     </div>
-    <a href="{{ route('teacher.classes.create') }}" class="btn btn-primary d-flex align-items-center gap-2">
-        <i class="feather-plus" style="font-size: 18px;"></i>
-        Buat Kelas
-    </a>
+    <span class="badge bg-light text-dark border">Kelas diatur oleh admin</span>
 </div>
 
 @if(session('success'))
@@ -350,18 +347,10 @@
     </div>
 @endif
 
-@if($classes->isEmpty())
-    <div class="empty-state">
-        <div class="empty-state-icon">
-            <i class="feather-folder-plus"></i>
-        </div>
-        <h5 class="empty-state-title">Belum ada kelas</h5>
-        <p class="empty-state-text">Mulai buat kelas baru untuk memulai mengelola pembelajaran Anda</p>
-        <a href="{{ route('teacher.classes.create') }}" class="btn btn-primary">
-            <i class="feather-plus me-2"></i>Buat Kelas Pertama
-        </a>
-    </div>
-@else
+<td class="text-end pe-3">
+    <span class="text-muted small">Dikelola admin</span>
+</td>
+
     @php
         $classesByGrade = [
             'grade-12' => $classes->filter(function($class) {

@@ -1,4 +1,4 @@
-@extends('layouts.frontend')
+ @extends('layouts.frontend')
 
 @php
     $title = 'Layla School - Formulir PPDB';

@@ -4,69 +4,75 @@ namespace App\Http\Controllers\Student;
 
 use App\Http\Controllers\Controller;
 use App\Models\PpdbApplication;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
-use Illuminate\View\View;
 
 class PpdbController extends Controller
 {
-    public function index(): RedirectResponse
+    public function index(Request $request)
     {
-        return redirect()->route('student.formulir');
+        $application = PpdbApplication::where('email', $request->user()->email)->first();
+
+        return view('student.ppdb.index', compact('application'));
     }
 
-    public function create(Request $request): View
+    public function create(Request $request)
     {
-        $user = $request->user();
-        $application = PpdbApplication::where('email', $user->email)->first();
+        $application = PpdbApplication::where('email', $request->user()->email)->first();
 
-        return view('student.formulir', [
-            'application' => $application,
-            'user' => $user,
-        ]);
+        return view('student.ppdb.formulir', compact('application'));
     }
 
-    public function store(Request $request): RedirectResponse
+    public function store(Request $request)
     {
-        $user = $request->user();
-
         $validated = $request->validate([
-            'student_name' => 'required|string|max:100',
-            'gender' => 'required|in:L,P',
+            'student_name' => 'required|string|max:255',
+            'gender' => 'required|string|max:10',
             'birth_place' => 'required|string|max:100',
             'birth_date' => 'required|date',
-            'previous_school' => 'nullable|string|max:150',
-            'parent_name' => 'required|string|max:100',
-            'phone' => 'required|string|max:20',
+            'previous_school' => 'required|string|max:255',
+            'parent_name' => 'required|string|max:255',
+            'phone' => 'required|string|max:30',
             'address' => 'required|string',
             'notes' => 'nullable|string',
         ]);
 
-        $application = PpdbApplication::where('email', $user->email)->first();
+        $application = PpdbApplication::where('email', $request->user()->email)->first();
 
-        $payload = array_merge($validated, [
-            'email' => $user->email,
+        $payload = [
+            'student_name' => $validated['student_name'],
+            'gender' => $validated['gender'],
+            'birth_place' => $validated['birth_place'],
+            'birth_date' => $validated['birth_date'],
+            'previous_school' => $validated['previous_school'],
+            'parent_name' => $validated['parent_name'],
+            'phone' => $validated['phone'],
+            'address' => $validated['address'],
+            'email' => $request->user()->email,
+            'notes' => $validated['notes'] ?? null,
             'status' => 'pending',
-            'registration_code' => $application?->registration_code ?? $this->generateRegistrationCode(),
-        ]);
+        ];
 
         if ($application) {
             $application->update($payload);
+            $registrationCode = $application->registration_code;
         } else {
-            PpdbApplication::create($payload);
+            $payload['registration_code'] = $this->generateRegistrationCode();
+
+            $application = PpdbApplication::create($payload);
+            $registrationCode = $application->registration_code;
         }
 
         return redirect()
             ->route('student.formulir')
             ->with('status', 'ppdb_submitted')
-            ->with('registration_code', $payload['registration_code']);
+            ->with('registration_code', $registrationCode);
     }
 
     private function generateRegistrationCode(): string
     {
         do {
-            $code = 'PPDB-'.strtoupper(Str::random(6));
+            $code = 'PPDB-' . strtoupper(Str::random(6));
         } while (PpdbApplication::where('registration_code', $code)->exists());
 
         return $code;
