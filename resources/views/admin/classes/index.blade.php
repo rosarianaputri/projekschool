@@ -45,7 +45,7 @@
                     <div class="text-center py-5">
                         <h5 class="mb-2">Belum ada kelas</h5>
                         <p class="text-muted mb-3">Tambahkan kelas terlebih dahulu agar guru dan siswa bisa terhubung.</p>
-                        <a href="{{ route('classes.create') }}" class="btn btn-primary">
+                        <a href="{{ route('admin.classes.create') }}" class="btn btn-primary">
                             <i class="fas fa-plus me-1"></i> Tambah Kelas
                         </a>
                     </div>
@@ -84,7 +84,7 @@
                                                 <a href="{{ route('classes.edit', $class) }}" class="btn btn-sm btn-outline-primary">
                                                     Edit
                                                 </a>
-                                                <form action="{{ route('classes.destroy', $class) }}" method="POST" class="d-inline">
+                                                <form action="{{ route('admin.classes.destroy', $class) }}" method="POST" class="d-inline">
                                                     @csrf
                                                     @method('DELETE')
                                                     <button type="submit" class="btn btn-sm btn-outline-danger" onclick="return confirm('Hapus kelas ini?')">
