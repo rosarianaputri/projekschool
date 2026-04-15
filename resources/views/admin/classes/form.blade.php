@@ -14,7 +14,7 @@
                         <h3 class="mb-1">{{ $isEdit ? 'Edit Kelas' : 'Tambah Kelas Baru' }}</h3>
                         <p class="text-muted mb-0">Admin mengatur kelas dan menentukan guru pengampu untuk tiap kelas.</p>
                     </div>
-                    <a href="{{ route('classes.index') }}" class="btn btn-outline-secondary">
+                    <a href="{{ route('admin.classes.index') }}" class="btn btn-outline-secondary">
                         <i class="fas fa-arrow-left me-1"></i> Kembali
                     </a>
                 </div>
@@ -38,7 +38,7 @@
     <div class="col-12">
         <div class="card stretch stretch-full">
             <div class="card-body">
-                <form action="{{ $isEdit ? route('classes.update', $teacher_class) : route('classes.store') }}" method="POST">
+                <form action="{{ $isEdit ? route('admin.classes.update', $teacher_class) : route('admin.classes.store') }}" method="POST">
                     @csrf
                     @if($isEdit)
                         @method('PUT')
@@ -119,7 +119,7 @@
                             <i class="fas fa-save me-1"></i>
                             {{ $isEdit ? 'Simpan Perubahan' : 'Simpan Kelas' }}
                         </button>
-                        <a href="{{ route('classes.index') }}" class="btn btn-light border">
+                        <a href="{{ route('admin.classes.index') }}" class="btn btn-light border">
                             Batal
                         </a>
                     </div>

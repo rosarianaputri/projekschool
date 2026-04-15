@@ -14,7 +14,7 @@
                         <h3 class="mb-1">{{ $isEdit ? 'Edit Jadwal' : 'Tambah Jadwal Baru' }}</h3>
                         <p class="text-muted mb-0">Admin menentukan jadwal kelas agar guru dan siswa tinggal mengikuti jadwal yang tersedia.</p>
                     </div>
-                    <a href="{{ route('schedules.index') }}" class="btn btn-outline-secondary">
+                    <a href="{{ route('admin.schedules.index') }}" class="btn btn-outline-secondary">
                         <i class="fas fa-arrow-left me-1"></i> Kembali
                     </a>
                 </div>
@@ -38,7 +38,7 @@
     <div class="col-12">
         <div class="card stretch stretch-full">
             <div class="card-body">
-                <form action="{{ $isEdit ? route('schedules.update', $schedule) : route('schedules.store') }}" method="POST">
+                <form action="{{ $isEdit ? route('admin.schedules.update', $schedule) : route('admin.schedules.store') }}" method="POST">
                     @csrf
                     @if($isEdit)
                         @method('PUT')
@@ -108,7 +108,7 @@
                             <i class="fas fa-save me-1"></i>
                             {{ $isEdit ? 'Simpan Perubahan' : 'Simpan Jadwal' }}
                         </button>
-                        <a href="{{ route('schedules.index') }}" class="btn btn-light border">
+                        <a href="{{ route('admin.schedules.index') }}" class="btn btn-light border">
                             Batal
                         </a>
                     </div>
