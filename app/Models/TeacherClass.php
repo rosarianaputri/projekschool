@@ -9,13 +9,15 @@ class TeacherClass extends Model
 {
     use HasFactory;
 
+    protected $table = 'teacher_classes';
+
     protected $fillable = [
         'teacher_id',
         'name',
         'subject',
         'semester',
-        'schedule',
         'room',
+        'schedule',
     ];
 
     public function teacher()
@@ -33,17 +35,23 @@ class TeacherClass extends Model
         return $this->hasMany(TeacherMaterial::class, 'teacher_class_id');
     }
 
+    public function schedules()
+    {
+        return $this->hasMany(TeacherSchedule::class, 'teacher_class_id');
+    }
+
+    public function grades()
+    {
+        return $this->hasMany(TeacherGrade::class, 'teacher_class_id');
+    }
+
     public function assignments()
     {
         return $this->hasMany(TeacherAssignment::class, 'teacher_class_id');
     }
 
-    public function schedules()
+    public function attendances()
     {
-        return $this->hasMany(TeacherSchedule::class, 'teacher_class_id');
-    }
-    public function classes()
-    {
-        return $this->hasMany(TeacherClass::class);
+        return $this->hasMany(TeacherAttendance::class, 'teacher_class_id');
     }
 }
