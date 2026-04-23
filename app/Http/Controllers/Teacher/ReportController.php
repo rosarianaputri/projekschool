@@ -26,7 +26,7 @@ class ReportController extends TeacherBaseController
             'materials' => TeacherMaterial::whereHas('class', function ($query) use ($teacherId) {
                 $query->where('teacher_id', $teacherId);
             })->count(),
-            'grades' => TeacherGrade::whereHas('class', function ($query) use ($teacherId) {
+            'grades' => TeacherGrade::whereHas('teacherClass', function ($query) use ($teacherId) {
                 $query->where('teacher_id', $teacherId);
             })->count(),
             'attendance_records' => TeacherAttendance::whereHas('class', function ($query) use ($teacherId) {
